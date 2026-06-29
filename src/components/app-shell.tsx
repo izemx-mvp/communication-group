@@ -98,9 +98,10 @@ export function AppShell({ children }: { children: ReactNode }) {
         {/* Topbar */}
         <header className="h-16 border-b border-border bg-background/80 backdrop-blur sticky top-0 z-30">
           <div className="h-full px-4 md:px-6 flex items-center gap-3">
-            <div className="md:hidden grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
-              N7
+            <div className="md:hidden flex items-center justify-center h-9 px-2 rounded-lg bg-foreground">
+              <img src={n7LogoAsset.url} alt="N7" className="h-5 w-auto" />
             </div>
+
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
