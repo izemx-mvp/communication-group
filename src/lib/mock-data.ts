@@ -66,20 +66,31 @@ export const dailyConversations = Array.from({ length: 14 }).map((_, i) => {
   const d = new Date();
   d.setDate(d.getDate() - (13 - i));
   return {
-    day: d.toLocaleDateString("en", { weekday: "short" }),
+    day: d.toLocaleDateString("fr", { weekday: "short" }),
     conversations: 40 + Math.floor(Math.random() * 80),
     resolved: 30 + Math.floor(Math.random() * 60),
   };
 });
 
 export const activities = [
-  { id: 1, type: "prospect", title: "New prospect received", desc: "Sophie Benali — Atlas Studio (Website)", time: "2 min ago" },
-  { id: 2, type: "assign", title: "Prospect assigned", desc: "Karim Hassan → Yassine A.", time: "18 min ago" },
-  { id: 3, type: "knowledge", title: "Knowledge updated", desc: "Article 'Pricing FAQ' published", time: "1 h ago" },
-  { id: 4, type: "doc", title: "New document uploaded", desc: "Q4-pricing-guide.pdf added to Documents", time: "3 h ago" },
-  { id: 5, type: "hours", title: "Business hours updated", desc: "Friday closing changed to 17:00", time: "Yesterday" },
-  { id: 6, type: "prospect", title: "New prospect received", desc: "Omar Tazi — Lumen AI (LinkedIn)", time: "Yesterday" },
+  { id: 1, type: "prospect", title: "Nouveau prospect reçu", desc: "Sophie Benali — Atlas Studio (Site web)", time: "Il y a 2 min" },
+  { id: 2, type: "assign", title: "Prospect assigné", desc: "Karim Hassan → Yassine A.", time: "Il y a 18 min" },
+  { id: 3, type: "knowledge", title: "Connaissance mise à jour", desc: "Article « FAQ Tarifs » publié", time: "Il y a 1 h" },
+  { id: 4, type: "doc", title: "Nouveau document téléversé", desc: "guide-tarifs-T4.pdf ajouté aux Documents", time: "Il y a 3 h" },
+  { id: 5, type: "hours", title: "Horaires d'ouverture mis à jour", desc: "Fermeture du vendredi modifiée à 17h00", time: "Hier" },
+  { id: 6, type: "prospect", title: "Nouveau prospect reçu", desc: "Omar Tazi — Lumen AI (LinkedIn)", time: "Hier" },
 ];
+
+// French label helpers (data values stay in English for stable filtering)
+export const statusLabel: Record<string, string> = {
+  New: "Nouveau", Contacted: "Contacté", Qualified: "Qualifié", Won: "Gagné", Lost: "Perdu",
+};
+export const scoreLabel: Record<string, string> = { Hot: "Chaud", Warm: "Tiède", Cold: "Froid" };
+export const sourceLabel: Record<string, string> = {
+  Website: "Site web", WhatsApp: "WhatsApp", Facebook: "Facebook", Instagram: "Instagram", LinkedIn: "LinkedIn",
+};
+export const docStatusLabel: Record<string, string> = { Draft: "Brouillon", Published: "Publié" };
+
 
 export interface Article {
   id: string;
