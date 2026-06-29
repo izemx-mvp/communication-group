@@ -39,19 +39,20 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Dashboard — N7 Back Office" },
-      { name: "description", content: "Overview of prospects, conversations and AI performance." },
+      { title: "Tableau de bord — N7 Back Office" },
+      { name: "description", content: "Vue d'ensemble des prospects, conversations et performances de l'IA." },
     ],
   }),
   component: Dashboard,
 });
 
 const kpis = [
-  { label: "Total Prospects", value: "1,284", change: "+12.4%", icon: Users, tone: "primary" as const },
-  { label: "Hot Leads", value: "187", change: "+8.1%", icon: Flame, tone: "warning" as const },
-  { label: "Conversations Today", value: "342", change: "+24%", icon: MessageCircle, tone: "info" as const },
-  { label: "AI Response Rate", value: "96.2%", change: "+1.4%", icon: Bot, tone: "success" as const },
+  { label: "Total des prospects", value: "1 284", change: "+12,4 %", icon: Users, tone: "primary" as const },
+  { label: "Prospects chauds", value: "187", change: "+8,1 %", icon: Flame, tone: "warning" as const },
+  { label: "Conversations aujourd'hui", value: "342", change: "+24 %", icon: MessageCircle, tone: "info" as const },
+  { label: "Taux de réponse IA", value: "96,2 %", change: "+1,4 %", icon: Bot, tone: "success" as const },
 ];
+
 
 const activityIcons: Record<string, typeof UserPlus> = {
   prospect: UserPlus,
@@ -67,16 +68,17 @@ function Dashboard() {
   return (
     <div>
       <PageHeader
-        title="Dashboard"
-        description="A quick pulse on your prospects and AI performance."
+        title="Tableau de bord"
+        description="Un aperçu rapide de vos prospects et des performances de l'IA."
         actions={
           <Button asChild>
             <Link to="/prospects">
-              View all prospects <ArrowUpRight className="ml-1.5 h-4 w-4" />
+              Voir tous les prospects <ArrowUpRight className="ml-1.5 h-4 w-4" />
             </Link>
           </Button>
         }
       />
+
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {kpis.map((k, i) => (
