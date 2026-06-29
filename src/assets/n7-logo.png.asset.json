@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "1716198d-c8be-4163-83d0-1f56d37002d3",
-  "project_id": "d4111955-9480-4227-a1a0-a0a1aa3b865b",
-  "url": "/__l5e/assets-v1/1716198d-c8be-4163-83d0-1f56d37002d3/n7-logo.png",
-  "r2_key": "a/v1/d4111955-9480-4227-a1a0-a0a1aa3b865b/1716198d-c8be-4163-83d0-1f56d37002d3/n7-logo.png",
-  "original_filename": "n7-logo.png",
-  "size": 3035,
   "content_type": "image/png",
-  "created_at": "2026-06-29T16:42:46Z"
+  "created_at": "2026-06-29T16:42:46Z",
+  "original_filename": "n7-logo.png",
+  "project_id": "815519fc-4818-4d02-9f30-70ce95103521",
+  "r2_key": "a/v1/815519fc-4818-4d02-9f30-70ce95103521/1716198d-c8be-4163-83d0-1f56d37002d3/n7-logo.png",
+  "size": 3035,
+  "url": "/__l5e/assets-v1/1716198d-c8be-4163-83d0-1f56d37002d3/n7-logo.png",
+  "version": 1
 }
