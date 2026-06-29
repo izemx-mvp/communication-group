@@ -28,7 +28,7 @@ export const Route = createFileRoute("/knowledge/faq")({
   component: FaqPage,
 });
 
-const empty: Faq = { id: "", question: "", answer: "", category: "Product", status: "Draft" };
+const empty: Faq = { id: "", question: "", answer: "", category: "Produit", status: "Draft" };
 
 function FaqPage() {
   const [list, setList] = useState<Faq[]>(seed);
@@ -36,20 +36,20 @@ function FaqPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   function save(f: Faq) {
-    if (!f.question.trim() || !f.answer.trim()) { toast.error("Question and answer are required"); return; }
+    if (!f.question.trim() || !f.answer.trim()) { toast.error("Question et réponse requises"); return; }
     if (f.id) {
       setList((l) => l.map((x) => (x.id === f.id ? f : x)));
-      toast.success("FAQ updated");
+      toast.success("FAQ mise à jour");
     } else {
       setList((l) => [{ ...f, id: `f_${Date.now()}` }, ...l]);
-      toast.success("FAQ created");
+      toast.success("FAQ créée");
     }
     setEditing(null);
   }
   function remove() {
     if (!deleteId) return;
     setList((l) => l.filter((x) => x.id !== deleteId));
-    toast.success("FAQ deleted");
+    toast.success("FAQ supprimée");
     setDeleteId(null);
   }
 
@@ -57,7 +57,7 @@ function FaqPage() {
     <div className="space-y-4">
       <div className="flex justify-end">
         <Button onClick={() => setEditing({ ...empty })}>
-          <Plus className="h-4 w-4 mr-1.5" /> New question
+          <Plus className="h-4 w-4 mr-1.5" /> Nouvelle question
         </Button>
       </div>
       <Card className="shadow-soft p-2">
@@ -67,7 +67,7 @@ function FaqPage() {
               <AccordionTrigger className="hover:no-underline">
                 <div className="flex items-center gap-3 text-left">
                   <span className="font-medium">{f.question}</span>
-                  <StatusBadge status={f.status} />
+                  <StatusBadge status={f.status === "Published" ? "Publié" : "Brouillon"} />
                 </div>
               </AccordionTrigger>
               <AccordionContent>
@@ -90,12 +90,12 @@ function FaqPage() {
       <AlertDialog open={!!deleteId} onOpenChange={(o) => !o && setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this question?</AlertDialogTitle>
-            <AlertDialogDescription>The AI will stop using this answer.</AlertDialogDescription>
+            <AlertDialogTitle>Supprimer cette question ?</AlertDialogTitle>
+            <AlertDialogDescription>L'IA cessera d'utiliser cette réponse.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={remove}>Delete</AlertDialogAction>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={remove}>Supprimer</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -110,36 +110,36 @@ function FaqDialog({ faq, onClose, onSave }: { faq: Faq | null; onClose: () => v
   return (
     <Dialog open={!!faq} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="sm:max-w-[540px]">
-        <DialogHeader><DialogTitle>{faq?.id ? "Edit question" : "New question"}</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>{faq?.id ? "Modifier la question" : "Nouvelle question"}</DialogTitle></DialogHeader>
         <div className="space-y-3">
           <div>
             <Label>Question</Label>
             <Input value={d.question} onChange={(e) => setD({ ...d, question: e.target.value })} />
           </div>
           <div>
-            <Label>Answer</Label>
+            <Label>Réponse</Label>
             <Textarea rows={5} value={d.answer} onChange={(e) => setD({ ...d, answer: e.target.value })} />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label>Category</Label>
+              <Label>Catégorie</Label>
               <Input value={d.category} onChange={(e) => setD({ ...d, category: e.target.value })} />
             </div>
             <div>
-              <Label>Status</Label>
+              <Label>Statut</Label>
               <Select value={d.status} onValueChange={(v: "Draft" | "Published") => setD({ ...d, status: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Draft">Draft</SelectItem>
-                  <SelectItem value="Published">Published</SelectItem>
+                  <SelectItem value="Draft">Brouillon</SelectItem>
+                  <SelectItem value="Published">Publié</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={() => onSave(d)}>Save</Button>
+          <Button variant="outline" onClick={onClose}>Annuler</Button>
+          <Button onClick={() => onSave(d)}>Enregistrer</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -25,11 +25,11 @@ type Closure = { id: string; name: string; date: string };
 function BusinessHoursPage() {
   const [hours, setHours] = useState(businessHours);
   const [holidays, setHolidays] = useState<Closure[]>([
-    { id: "h1", name: "Eid al-Fitr", date: "2026-04-10" },
-    { id: "h2", name: "Independence Day", date: "2026-11-18" },
+    { id: "h1", name: "Aïd al-Fitr", date: "2026-04-10" },
+    { id: "h2", name: "Fête de l'Indépendance", date: "2026-11-18" },
   ]);
   const [closures, setClosures] = useState<Closure[]>([
-    { id: "c1", name: "Summer break", date: "2026-08-01 — 2026-08-15" },
+    { id: "c1", name: "Congés d'été", date: "2026-08-01 — 2026-08-15" },
   ]);
   const [tz, setTz] = useState("africa-casablanca");
   const [holidayOpen, setHolidayOpen] = useState(false);
@@ -40,11 +40,11 @@ function BusinessHoursPage() {
       <Card className="shadow-soft">
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle className="text-base">Opening hours</CardTitle>
-            <p className="text-sm text-muted-foreground">Used by the AI to answer "are you open?" questions.</p>
+            <CardTitle className="text-base">Horaires d'ouverture</CardTitle>
+            <p className="text-sm text-muted-foreground">Utilisés par l'IA pour répondre à « êtes-vous ouverts ? ».</p>
           </div>
-          <Button size="sm" onClick={() => toast.success("Hours saved")}>
-            <Save className="h-4 w-4 mr-1.5" /> Save
+          <Button size="sm" onClick={() => toast.success("Horaires enregistrés")}>
+            <Save className="h-4 w-4 mr-1.5" /> Enregistrer
           </Button>
         </CardHeader>
         <CardContent className="space-y-3">
@@ -61,7 +61,7 @@ function BusinessHoursPage() {
                 <Switch checked={h.closed} onCheckedChange={(v) => {
                   const next = [...hours]; next[i] = { ...h, closed: v }; setHours(next);
                 }} />
-                <Label className="text-sm text-muted-foreground">Closed</Label>
+                <Label className="text-sm text-muted-foreground">Fermé</Label>
               </div>
             </div>
           ))}
@@ -70,7 +70,7 @@ function BusinessHoursPage() {
 
       <div className="grid md:grid-cols-2 gap-6">
         <Card className="shadow-soft">
-          <CardHeader><CardTitle className="text-base">Public holidays</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-base">Jours fériés</CardTitle></CardHeader>
           <CardContent className="space-y-3">
             {holidays.map((h) => (
               <div key={h.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/40">
@@ -80,25 +80,25 @@ function BusinessHoursPage() {
                 </div>
                 <Button size="sm" variant="ghost" className="text-destructive" onClick={() => {
                   setHolidays((l) => l.filter((x) => x.id !== h.id));
-                  toast.success("Holiday removed");
+                  toast.success("Jour férié supprimé");
                 }}><Trash2 className="h-3.5 w-3.5" /></Button>
               </div>
             ))}
             <Button variant="outline" size="sm" className="w-full" onClick={() => setHolidayOpen(true)}>
-              <Plus className="h-4 w-4 mr-1.5" /> Add holiday
+              <Plus className="h-4 w-4 mr-1.5" /> Ajouter un jour férié
             </Button>
           </CardContent>
         </Card>
 
         <Card className="shadow-soft">
-          <CardHeader><CardTitle className="text-base">Temporary closures & time zone</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-base">Fermetures temporaires et fuseau horaire</CardTitle></CardHeader>
           <CardContent className="space-y-4">
             <div>
-              <Label className="text-sm">Time zone</Label>
-              <Select value={tz} onValueChange={(v) => { setTz(v); toast.success("Time zone updated"); }}>
+              <Label className="text-sm">Fuseau horaire</Label>
+              <Select value={tz} onValueChange={(v) => { setTz(v); toast.success("Fuseau horaire mis à jour"); }}>
                 <SelectTrigger className="mt-1.5"><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="africa-casablanca">Africa / Casablanca (GMT+1)</SelectItem>
+                  <SelectItem value="africa-casablanca">Afrique / Casablanca (GMT+1)</SelectItem>
                   <SelectItem value="europe-paris">Europe / Paris (GMT+1)</SelectItem>
                   <SelectItem value="utc">UTC</SelectItem>
                 </SelectContent>
@@ -112,12 +112,12 @@ function BusinessHoursPage() {
                 </div>
                 <Button size="sm" variant="ghost" className="text-destructive" onClick={() => {
                   setClosures((l) => l.filter((x) => x.id !== c.id));
-                  toast.success("Closure removed");
+                  toast.success("Fermeture supprimée");
                 }}><Trash2 className="h-3.5 w-3.5" /></Button>
               </div>
             ))}
             <Button variant="outline" size="sm" className="w-full" onClick={() => setClosureOpen(true)}>
-              <Plus className="h-4 w-4 mr-1.5" /> Add closure
+              <Plus className="h-4 w-4 mr-1.5" /> Ajouter une fermeture
             </Button>
           </CardContent>
         </Card>
@@ -125,16 +125,16 @@ function BusinessHoursPage() {
 
       <ClosureDialog
         open={holidayOpen}
-        title="Add public holiday"
+        title="Ajouter un jour férié"
         onClose={() => setHolidayOpen(false)}
-        onSave={(c) => { setHolidays((l) => [...l, c]); toast.success("Holiday added"); setHolidayOpen(false); }}
+        onSave={(c) => { setHolidays((l) => [...l, c]); toast.success("Jour férié ajouté"); setHolidayOpen(false); }}
         dateType="single"
       />
       <ClosureDialog
         open={closureOpen}
-        title="Add temporary closure"
+        title="Ajouter une fermeture temporaire"
         onClose={() => setClosureOpen(false)}
-        onSave={(c) => { setClosures((l) => [...l, c]); toast.success("Closure added"); setClosureOpen(false); }}
+        onSave={(c) => { setClosures((l) => [...l, c]); toast.success("Fermeture ajoutée"); setClosureOpen(false); }}
         dateType="range"
       />
     </div>
@@ -159,8 +159,8 @@ function ClosureDialog({
         <DialogHeader><DialogTitle>{title}</DialogTitle></DialogHeader>
         <div className="space-y-3">
           <div>
-            <Label>Name</Label>
-            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Christmas Day" />
+            <Label>Nom</Label>
+            <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="ex. Jour de Noël" />
           </div>
           {dateType === "single" ? (
             <div>
@@ -170,24 +170,24 @@ function ClosureDialog({
           ) : (
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <Label>From</Label>
+                <Label>Du</Label>
                 <Input type="date" value={start} onChange={(e) => setStart(e.target.value)} />
               </div>
               <div>
-                <Label>To</Label>
+                <Label>Au</Label>
                 <Input type="date" value={end} onChange={(e) => setEnd(e.target.value)} />
               </div>
             </div>
           )}
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => { reset(); onClose(); }}>Cancel</Button>
+          <Button variant="outline" onClick={() => { reset(); onClose(); }}>Annuler</Button>
           <Button onClick={() => {
-            if (!name.trim() || !start) { toast.error("Name and date required"); return; }
+            if (!name.trim() || !start) { toast.error("Nom et date requis"); return; }
             const date = dateType === "single" ? start : `${start}${end ? ` — ${end}` : ""}`;
             onSave({ id: `c_${Date.now()}`, name, date });
             reset();
-          }}>Add</Button>
+          }}>Ajouter</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

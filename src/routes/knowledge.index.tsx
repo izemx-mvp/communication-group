@@ -27,7 +27,7 @@ export const Route = createFileRoute("/knowledge/")({
 });
 
 const empty: Article = {
-  id: "", title: "", category: "Onboarding", content: "", tags: [],
+  id: "", title: "", category: "Intégration", content: "", tags: [],
   status: "Draft", updatedAt: new Date().toISOString().slice(0, 10),
 };
 
@@ -42,21 +42,21 @@ function ArticlesPage() {
   );
 
   function save(a: Article) {
-    if (!a.title.trim()) { toast.error("Title is required"); return; }
+    if (!a.title.trim()) { toast.error("Le titre est requis"); return; }
     const today = new Date().toISOString().slice(0, 10);
     if (a.id) {
       setList((l) => l.map((x) => (x.id === a.id ? { ...a, updatedAt: today } : x)));
-      toast.success("Article updated");
+      toast.success("Article mis à jour");
     } else {
       setList((l) => [{ ...a, id: `a_${Date.now()}`, updatedAt: today }, ...l]);
-      toast.success("Article created");
+      toast.success("Article créé");
     }
     setEditing(null);
   }
   function remove() {
     if (!deleteId) return;
     setList((l) => l.filter((x) => x.id !== deleteId));
-    toast.success("Article deleted");
+    toast.success("Article supprimé");
     setDeleteId(null);
   }
 
@@ -65,10 +65,10 @@ function ArticlesPage() {
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search articles…" className="pl-9" />
+          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Rechercher des articles…" className="pl-9" />
         </div>
         <Button onClick={() => setEditing({ ...empty })}>
-          <Plus className="h-4 w-4 mr-1.5" /> New article
+          <Plus className="h-4 w-4 mr-1.5" /> Nouvel article
         </Button>
       </div>
 
@@ -81,7 +81,7 @@ function ArticlesPage() {
                   <div className="text-xs text-primary font-medium uppercase tracking-wide">{a.category}</div>
                   <div className="font-semibold text-base mt-1">{a.title}</div>
                 </div>
-                <StatusBadge status={a.status} />
+                <StatusBadge status={a.status === "Published" ? "Publié" : "Brouillon"} />
               </div>
               <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{a.content}</p>
               <div className="mt-3 flex flex-wrap gap-1.5">
@@ -90,7 +90,7 @@ function ArticlesPage() {
                 ))}
               </div>
               <div className="mt-4 flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">Updated {a.updatedAt}</span>
+                <span className="text-xs text-muted-foreground">Mis à jour le {a.updatedAt}</span>
                 <div className="flex gap-1">
                   <Button size="sm" variant="ghost" onClick={() => setEditing(a)}><Edit className="h-3.5 w-3.5" /></Button>
                   <Button size="sm" variant="ghost" className="text-destructive" onClick={() => setDeleteId(a.id)}><Trash2 className="h-3.5 w-3.5" /></Button>
@@ -100,7 +100,7 @@ function ArticlesPage() {
           </Card>
         ))}
         {filtered.length === 0 && (
-          <div className="col-span-full text-center py-12 text-muted-foreground text-sm">No articles found.</div>
+          <div className="col-span-full text-center py-12 text-muted-foreground text-sm">Aucun article trouvé.</div>
         )}
       </div>
 
@@ -109,14 +109,14 @@ function ArticlesPage() {
       <AlertDialog open={!!deleteId} onOpenChange={(o) => !o && setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this article?</AlertDialogTitle>
+            <AlertDialogTitle>Supprimer cet article ?</AlertDialogTitle>
             <AlertDialogDescription>
-              The AI will immediately stop using it. This action cannot be undone.
+              L'IA cessera immédiatement de l'utiliser. Cette action est irréversible.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={remove}>Delete</AlertDialogAction>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={remove}>Supprimer</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -128,43 +128,42 @@ function ArticleDialog({
   article, onClose, onSave,
 }: { article: Article | null; onClose: () => void; onSave: (a: Article) => void }) {
   const [draft, setDraft] = useState<Article>(article ?? empty);
-  // re-sync when opened with a different article
   if (article && draft.id !== article.id) setDraft(article);
 
   return (
     <Dialog open={!!article} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="sm:max-w-[560px]">
         <DialogHeader>
-          <DialogTitle>{article?.id ? "Edit article" : "New article"}</DialogTitle>
-          <DialogDescription>Published articles are used by the AI Customer Service Agent.</DialogDescription>
+          <DialogTitle>{article?.id ? "Modifier l'article" : "Nouvel article"}</DialogTitle>
+          <DialogDescription>Les articles publiés sont utilisés par l'Agent IA du service client.</DialogDescription>
         </DialogHeader>
         <div className="space-y-3">
           <div>
-            <Label>Title</Label>
-            <Input value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} placeholder="e.g. How to reset my password" />
+            <Label>Titre</Label>
+            <Input value={draft.title} onChange={(e) => setDraft({ ...draft, title: e.target.value })} placeholder="ex. Comment réinitialiser mon mot de passe" />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label>Category</Label>
+              <Label>Catégorie</Label>
               <Input value={draft.category} onChange={(e) => setDraft({ ...draft, category: e.target.value })} />
             </div>
             <div>
-              <Label>Status</Label>
+              <Label>Statut</Label>
               <Select value={draft.status} onValueChange={(v: "Draft" | "Published") => setDraft({ ...draft, status: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Draft">Draft</SelectItem>
-                  <SelectItem value="Published">Published</SelectItem>
+                  <SelectItem value="Draft">Brouillon</SelectItem>
+                  <SelectItem value="Published">Publié</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
           <div>
-            <Label>Content</Label>
-            <Textarea rows={6} value={draft.content} onChange={(e) => setDraft({ ...draft, content: e.target.value })} placeholder="Write the article body…" />
+            <Label>Contenu</Label>
+            <Textarea rows={6} value={draft.content} onChange={(e) => setDraft({ ...draft, content: e.target.value })} placeholder="Rédigez le corps de l'article…" />
           </div>
           <div>
-            <Label>Tags (comma separated)</Label>
+            <Label>Étiquettes (séparées par des virgules)</Label>
             <Input
               value={draft.tags.join(", ")}
               onChange={(e) => setDraft({ ...draft, tags: e.target.value.split(",").map((t) => t.trim()).filter(Boolean) })}
@@ -172,8 +171,8 @@ function ArticleDialog({
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={() => onSave(draft)}>Save</Button>
+          <Button variant="outline" onClick={onClose}>Annuler</Button>
+          <Button onClick={() => onSave(draft)}>Enregistrer</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

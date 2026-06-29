@@ -14,10 +14,10 @@ export const Route = createFileRoute("/knowledge/contact")({
 });
 
 const fields = [
-  { key: "mainPhone", label: "Main phone", icon: Phone },
-  { key: "whatsapp", label: "WhatsApp number", icon: MessageCircle },
+  { key: "mainPhone", label: "Téléphone principal", icon: Phone },
+  { key: "whatsapp", label: "Numéro WhatsApp", icon: MessageCircle },
   { key: "email", label: "Email", icon: Mail },
-  { key: "website", label: "Website", icon: Globe },
+  { key: "website", label: "Site web", icon: Globe },
   { key: "facebook", label: "Facebook", icon: Facebook },
   { key: "instagram", label: "Instagram", icon: Instagram },
   { key: "linkedin", label: "LinkedIn", icon: Linkedin },
@@ -30,11 +30,11 @@ function ContactPage() {
     <Card className="shadow-soft">
       <CardHeader className="flex flex-row items-center justify-between">
         <div>
-          <CardTitle className="text-base">Contact information</CardTitle>
-          <p className="text-sm text-muted-foreground">Used by the AI whenever a customer asks how to reach us.</p>
+          <CardTitle className="text-base">Coordonnées</CardTitle>
+          <p className="text-sm text-muted-foreground">Utilisées par l'IA chaque fois qu'un client demande comment nous contacter.</p>
         </div>
-        <Button size="sm" onClick={() => toast.success("Contact info saved")}>
-          <Save className="h-4 w-4 mr-1.5" /> Save
+        <Button size="sm" onClick={() => toast.success("Coordonnées enregistrées")}>
+          <Save className="h-4 w-4 mr-1.5" /> Enregistrer
         </Button>
       </CardHeader>
       <CardContent className="grid sm:grid-cols-2 gap-4">

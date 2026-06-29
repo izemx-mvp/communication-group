@@ -33,27 +33,27 @@ function ServicesPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   function save(s: Service) {
-    if (!s.name.trim()) { toast.error("Name is required"); return; }
+    if (!s.name.trim()) { toast.error("Le nom est requis"); return; }
     if (s.id) {
       setList((l) => l.map((x) => (x.id === s.id ? s : x)));
-      toast.success("Service updated");
+      toast.success("Service mis à jour");
     } else {
       setList((l) => [{ ...s, id: `s_${Date.now()}` }, ...l]);
-      toast.success("Service created");
+      toast.success("Service créé");
     }
     setEditing(null);
   }
   function remove() {
     if (!deleteId) return;
     setList((l) => l.filter((x) => x.id !== deleteId));
-    toast.success("Service deleted");
+    toast.success("Service supprimé");
     setDeleteId(null);
   }
 
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <Button onClick={() => setEditing({ ...empty })}><Plus className="h-4 w-4 mr-1.5" /> New service</Button>
+        <Button onClick={() => setEditing({ ...empty })}><Plus className="h-4 w-4 mr-1.5" /> Nouveau service</Button>
       </div>
       <div className="grid sm:grid-cols-2 gap-4">
         {list.map((s) => (
@@ -64,7 +64,7 @@ function ServicesPage() {
                   <div className="font-semibold">{s.name}</div>
                   {s.price && <div className="text-sm text-primary font-medium mt-0.5">{s.price}</div>}
                 </div>
-                <StatusBadge status={s.status} />
+                <StatusBadge status={s.status === "Published" ? "Publié" : "Brouillon"} />
               </div>
               <p className="text-sm text-muted-foreground mt-2">{s.description}</p>
               <div className="mt-4 flex gap-1 justify-end">
@@ -81,12 +81,12 @@ function ServicesPage() {
       <AlertDialog open={!!deleteId} onOpenChange={(o) => !o && setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this service?</AlertDialogTitle>
-            <AlertDialogDescription>The AI will stop offering it.</AlertDialogDescription>
+            <AlertDialogTitle>Supprimer ce service ?</AlertDialogTitle>
+            <AlertDialogDescription>L'IA cessera de le proposer.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={remove}>Delete</AlertDialogAction>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={remove}>Supprimer</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -101,10 +101,10 @@ function ServiceDialog({ svc, onClose, onSave }: { svc: Service | null; onClose:
   return (
     <Dialog open={!!svc} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="sm:max-w-[520px]">
-        <DialogHeader><DialogTitle>{svc?.id ? "Edit service" : "New service"}</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>{svc?.id ? "Modifier le service" : "Nouveau service"}</DialogTitle></DialogHeader>
         <div className="space-y-3">
           <div>
-            <Label>Name</Label>
+            <Label>Nom</Label>
             <Input value={d.name} onChange={(e) => setD({ ...d, name: e.target.value })} />
           </div>
           <div>
@@ -113,24 +113,24 @@ function ServiceDialog({ svc, onClose, onSave }: { svc: Service | null; onClose:
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label>Price (optional)</Label>
-              <Input value={d.price ?? ""} onChange={(e) => setD({ ...d, price: e.target.value })} placeholder="e.g. From €499/mo" />
+              <Label>Prix (optionnel)</Label>
+              <Input value={d.price ?? ""} onChange={(e) => setD({ ...d, price: e.target.value })} placeholder="ex. À partir de 499 €/mois" />
             </div>
             <div>
-              <Label>Status</Label>
+              <Label>Statut</Label>
               <Select value={d.status} onValueChange={(v: "Draft" | "Published") => setD({ ...d, status: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="Draft">Draft</SelectItem>
-                  <SelectItem value="Published">Published</SelectItem>
+                  <SelectItem value="Draft">Brouillon</SelectItem>
+                  <SelectItem value="Published">Publié</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={() => onSave(d)}>Save</Button>
+          <Button variant="outline" onClick={onClose}>Annuler</Button>
+          <Button onClick={() => onSave(d)}>Enregistrer</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
