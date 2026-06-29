@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { Save, Phone, MessageCircle, Mail, Globe, Facebook, Instagram, Linkedin } from "lucide-react";
 import { toast } from "sonner";
 
@@ -23,6 +24,8 @@ const fields = [
 ] as const;
 
 function ContactPage() {
+  const [info, setInfo] = useState({ ...contactInfo });
+
   return (
     <Card className="shadow-soft">
       <CardHeader className="flex flex-row items-center justify-between">
@@ -30,7 +33,7 @@ function ContactPage() {
           <CardTitle className="text-base">Contact information</CardTitle>
           <p className="text-sm text-muted-foreground">Used by the AI whenever a customer asks how to reach us.</p>
         </div>
-        <Button size="sm" onClick={() => toast.success("Saved")}>
+        <Button size="sm" onClick={() => toast.success("Contact info saved")}>
           <Save className="h-4 w-4 mr-1.5" /> Save
         </Button>
       </CardHeader>
@@ -40,7 +43,11 @@ function ContactPage() {
             <Label className="text-sm">{label}</Label>
             <div className="relative">
               <Icon className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input defaultValue={contactInfo[key]} className="pl-9" />
+              <Input
+                value={info[key]}
+                onChange={(e) => setInfo({ ...info, [key]: e.target.value })}
+                className="pl-9"
+              />
             </div>
           </div>
         ))}

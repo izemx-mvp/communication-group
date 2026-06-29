@@ -1,4 +1,6 @@
+import n7LogoAsset from "@/assets/n7-logo.png.asset.json";
 import { Link, useRouterState } from "@tanstack/react-router";
+
 import {
   LayoutDashboard,
   Users,
@@ -39,15 +41,12 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen w-full bg-background text-foreground">
       {/* Sidebar */}
       <aside className="hidden md:flex w-64 shrink-0 flex-col border-r border-border bg-sidebar">
-        <div className="flex items-center gap-2 px-5 h-16 border-b border-border">
-          <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground font-bold">
-            N7
-          </div>
-          <div className="leading-tight">
-            <div className="text-sm font-semibold">N7 Group</div>
-            <div className="text-[11px] text-muted-foreground">AI Customer Service</div>
+        <div className="flex items-center px-4 h-16 border-b border-border">
+          <div className="flex items-center justify-center w-full h-11 rounded-lg bg-foreground px-3">
+            <img src={n7LogoAsset.url} alt="N7 Communication Group" className="h-7 w-auto" />
           </div>
         </div>
+
 
         <nav className="flex-1 p-3 space-y-1">
           {nav.map((item) => {
@@ -99,9 +98,10 @@ export function AppShell({ children }: { children: ReactNode }) {
         {/* Topbar */}
         <header className="h-16 border-b border-border bg-background/80 backdrop-blur sticky top-0 z-30">
           <div className="h-full px-4 md:px-6 flex items-center gap-3">
-            <div className="md:hidden grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground font-bold text-sm">
-              N7
+            <div className="md:hidden flex items-center justify-center h-9 px-2 rounded-lg bg-foreground">
+              <img src={n7LogoAsset.url} alt="N7" className="h-5 w-auto" />
             </div>
+
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
