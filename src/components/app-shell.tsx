@@ -39,15 +39,12 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen w-full bg-background text-foreground">
       {/* Sidebar */}
       <aside className="hidden md:flex w-64 shrink-0 flex-col border-r border-border bg-sidebar">
-        <div className="flex items-center gap-2 px-5 h-16 border-b border-border">
-          <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground font-bold">
-            N7
-          </div>
-          <div className="leading-tight">
-            <div className="text-sm font-semibold">N7 Group</div>
-            <div className="text-[11px] text-muted-foreground">AI Customer Service</div>
+        <div className="flex items-center px-4 h-16 border-b border-border">
+          <div className="flex items-center justify-center w-full h-11 rounded-lg bg-foreground px-3">
+            <img src={n7LogoAsset.url} alt="N7 Communication Group" className="h-7 w-auto" />
           </div>
         </div>
+
 
         <nav className="flex-1 p-3 space-y-1">
           {nav.map((item) => {
