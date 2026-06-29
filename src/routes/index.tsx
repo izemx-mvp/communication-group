@@ -97,7 +97,7 @@ function Dashboard() {
                   </div>
                 </div>
                 <div className="mt-3 text-2xl font-semibold tracking-tight">{k.value}</div>
-                <div className="mt-1 text-xs font-medium text-success">{k.change} vs last week</div>
+                <div className="mt-1 text-xs font-medium text-success">{k.change} vs semaine dernière</div>
               </CardContent>
             </Card>
           </motion.div>
@@ -108,11 +108,11 @@ function Dashboard() {
         <Card className="lg:col-span-2 shadow-soft">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle className="text-base">Recent Prospects</CardTitle>
-              <p className="text-sm text-muted-foreground mt-0.5">Latest submissions across all channels</p>
+              <CardTitle className="text-base">Prospects récents</CardTitle>
+              <p className="text-sm text-muted-foreground mt-0.5">Dernières soumissions sur tous les canaux</p>
             </div>
             <Button asChild variant="ghost" size="sm">
-              <Link to="/prospects">See all</Link>
+              <Link to="/prospects">Voir tout</Link>
             </Button>
           </CardHeader>
           <CardContent className="p-0">
@@ -120,15 +120,16 @@ function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Full Name</TableHead>
-                    <TableHead>Company</TableHead>
+                    <TableHead>Nom complet</TableHead>
+                    <TableHead>Société</TableHead>
                     <TableHead className="hidden md:table-cell">Email</TableHead>
                     <TableHead>Source</TableHead>
-                    <TableHead>Lead Score</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Score</TableHead>
+                    <TableHead>Statut</TableHead>
                     <TableHead className="hidden lg:table-cell">Date</TableHead>
                   </TableRow>
                 </TableHeader>
+
                 <TableBody>
                   {recent.map((p) => (
                     <TableRow key={p.id} className="hover:bg-muted/40">
@@ -143,8 +144,9 @@ function Dashboard() {
                       <TableCell><StatusBadge status={p.score} /></TableCell>
                       <TableCell><StatusBadge status={p.status} /></TableCell>
                       <TableCell className="hidden lg:table-cell text-muted-foreground text-sm">
-                        {new Date(p.date).toLocaleDateString()}
+                        {new Date(p.date).toLocaleDateString("fr-FR")}
                       </TableCell>
+
                     </TableRow>
                   ))}
                 </TableBody>
@@ -155,9 +157,10 @@ function Dashboard() {
 
         <Card className="shadow-soft">
           <CardHeader>
-            <CardTitle className="text-base">Recent Activity</CardTitle>
-            <p className="text-sm text-muted-foreground">Latest events across the back office</p>
+            <CardTitle className="text-base">Activité récente</CardTitle>
+            <p className="text-sm text-muted-foreground">Derniers événements du back office</p>
           </CardHeader>
+
           <CardContent>
             <ol className="relative space-y-4 ml-2">
               {activities.map((a) => {
@@ -180,9 +183,10 @@ function Dashboard() {
 
       <Card className="mt-6 shadow-soft">
         <CardHeader>
-          <CardTitle className="text-base">Lead Sources</CardTitle>
-          <p className="text-sm text-muted-foreground">Where prospects are coming from</p>
+          <CardTitle className="text-base">Sources des prospects</CardTitle>
+          <p className="text-sm text-muted-foreground">D'où viennent vos prospects</p>
         </CardHeader>
+
         <CardContent>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
