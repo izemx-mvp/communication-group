@@ -1,33 +1,58 @@
-import { createFileRoute, Link, useParams } from "@tanstack/react-router";
-import { ArrowLeft, Mail, Phone, MapPin, Building2, Edit, UserCheck, Trash2, Calendar } from "lucide-react";
+import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-router";
+import { useState } from "react";
+import {
+  ArrowLeft, Mail, Phone, MapPin, Building2, Edit, UserCheck, Trash2, Calendar,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { PageHeader, StatusBadge } from "@/components/app-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
-import { prospects } from "@/lib/mock-data";
+import {
+  Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
+import {
+  type LeadScore, type LeadSource, type LeadStatus, type Prospect,
+} from "@/lib/mock-data";
+import { prospectsStore, useProspects } from "@/lib/prospects-store";
 
 export const Route = createFileRoute("/prospects/$id")({
-  head: () => ({
-    meta: [{ title: "Prospect detail — N7 Back Office" }],
-  }),
+  head: () => ({ meta: [{ title: "Prospect detail — N7 Back Office" }] }),
   component: ProspectDetail,
   notFoundComponent: () => (
     <div className="p-8 text-center text-muted-foreground">Prospect not found.</div>
   ),
 });
 
+const statuses: LeadStatus[] = ["New", "Contacted", "Qualified", "Won", "Lost"];
+const sources: LeadSource[] = ["Website", "WhatsApp", "Facebook", "Instagram", "LinkedIn"];
+const scores: LeadScore[] = ["Cold", "Warm", "Hot"];
+const team = ["Yassine A.", "Fatima Z.", "Hicham B.", "Unassigned"];
+
 function ProspectDetail() {
   const { id } = useParams({ from: "/prospects/$id" });
-  const p = prospects.find((x) => x.id === id);
+  const navigate = useNavigate();
+  const list = useProspects();
+  const p = list.find((x) => x.id === id);
 
-  if (!p) {
-    return <div className="p-8 text-center text-muted-foreground">Prospect not found.</div>;
-  }
+  const [editOpen, setEditOpen] = useState(false);
+  const [assignOpen, setAssignOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [note, setNote] = useState(p?.notes ?? "");
 
+  if (!p) return <div className="p-8 text-center text-muted-foreground">Prospect not found.</div>;
   const initials = `${p.prenom[0]}${p.nom[0]}`;
 
   return (
@@ -41,13 +66,13 @@ function ProspectDetail() {
         description={p.societe}
         actions={
           <>
-            <Button variant="outline" size="sm" onClick={() => toast.success("Edit drawer opened")}>
+            <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
               <Edit className="h-4 w-4 mr-1.5" /> Edit
             </Button>
-            <Button variant="outline" size="sm" onClick={() => toast.success("Assignment updated")}>
+            <Button variant="outline" size="sm" onClick={() => setAssignOpen(true)}>
               <UserCheck className="h-4 w-4 mr-1.5" /> Assign
             </Button>
-            <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => toast.error("Prospect deleted")}>
+            <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setDeleteOpen(true)}>
               <Trash2 className="h-4 w-4 mr-1.5" /> Delete
             </Button>
           </>
@@ -79,20 +104,21 @@ function ProspectDetail() {
               </div>
               <Separator />
               <div>
-                <div className="text-sm font-medium mb-1">Message</div>
-                <p className="text-sm text-muted-foreground bg-muted/40 rounded-lg p-3">{p.message}</p>
+                <div className="text-sm font-medium mb-1.5">Message</div>
+                <p className="text-sm text-muted-foreground bg-muted/40 rounded-md p-3">{p.message}</p>
               </div>
             </CardContent>
           </Card>
 
           <Card className="shadow-soft">
-            <CardHeader>
-              <CardTitle className="text-base">Internal notes</CardTitle>
-            </CardHeader>
+            <CardHeader><CardTitle className="text-base">Internal notes</CardTitle></CardHeader>
             <CardContent>
-              <Textarea defaultValue={p.notes} placeholder="Add a private note for your team…" rows={4} />
+              <Textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Add a private note for your team…" rows={4} />
               <div className="flex justify-end mt-3">
-                <Button size="sm" onClick={() => toast.success("Note saved")}>Save note</Button>
+                <Button size="sm" onClick={() => {
+                  prospectsStore.update(p.id, { notes: note });
+                  toast.success("Note saved");
+                }}>Save note</Button>
               </div>
             </CardContent>
           </Card>
@@ -100,9 +126,7 @@ function ProspectDetail() {
 
         <div className="space-y-6">
           <Card className="shadow-soft">
-            <CardHeader>
-              <CardTitle className="text-base">Internal information</CardTitle>
-            </CardHeader>
+            <CardHeader><CardTitle className="text-base">Internal information</CardTitle></CardHeader>
             <CardContent className="space-y-3 text-sm">
               <KV k="Lead Score" v={<StatusBadge status={p.score} />} />
               <KV k="Status" v={<StatusBadge status={p.status} />} />
@@ -122,7 +146,111 @@ function ProspectDetail() {
           </Card>
         </div>
       </div>
+
+      <EditDialog open={editOpen} onClose={() => setEditOpen(false)} prospect={p} />
+      <AssignDialog open={assignOpen} onClose={() => setAssignOpen(false)} prospect={p} />
+
+      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete this prospect?</AlertDialogTitle>
+            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={() => {
+              prospectsStore.remove(p.id);
+              toast.success("Prospect deleted");
+              navigate({ to: "/prospects" });
+            }}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
+  );
+}
+
+function EditDialog({ open, onClose, prospect }: { open: boolean; onClose: () => void; prospect: Prospect }) {
+  const [d, setD] = useState(prospect);
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
+      <DialogContent className="sm:max-w-[640px] max-h-[90vh] overflow-y-auto">
+        <DialogHeader><DialogTitle>Edit prospect</DialogTitle></DialogHeader>
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div><Label>Prénom</Label><Input value={d.prenom} onChange={(e) => setD({ ...d, prenom: e.target.value })} /></div>
+            <div><Label>Nom</Label><Input value={d.nom} onChange={(e) => setD({ ...d, nom: e.target.value })} /></div>
+          </div>
+          <div><Label>Société</Label><Input value={d.societe} onChange={(e) => setD({ ...d, societe: e.target.value })} /></div>
+          <div className="grid grid-cols-2 gap-3">
+            <div><Label>Email</Label><Input value={d.email} onChange={(e) => setD({ ...d, email: e.target.value })} /></div>
+            <div><Label>Téléphone</Label><Input value={d.telephone} onChange={(e) => setD({ ...d, telephone: e.target.value })} /></div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div><Label>Pays</Label><Input value={d.pays} onChange={(e) => setD({ ...d, pays: e.target.value })} /></div>
+            <div><Label>Ville</Label><Input value={d.ville} onChange={(e) => setD({ ...d, ville: e.target.value })} /></div>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <Label>Source</Label>
+              <Select value={d.source} onValueChange={(v: LeadSource) => setD({ ...d, source: v })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>{sources.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Score</Label>
+              <Select value={d.score} onValueChange={(v: LeadScore) => setD({ ...d, score: v })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>{scores.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label>Status</Label>
+              <Select value={d.status} onValueChange={(v: LeadStatus) => setD({ ...d, status: v })}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>{statuses.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button onClick={() => {
+            prospectsStore.update(d.id, d);
+            toast.success("Prospect updated");
+            onClose();
+          }}>Save</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function AssignDialog({ open, onClose, prospect }: { open: boolean; onClose: () => void; prospect: Prospect }) {
+  const [who, setWho] = useState(prospect.assignedTo);
+  return (
+    <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
+      <DialogContent className="sm:max-w-[420px]">
+        <DialogHeader><DialogTitle>Assign prospect</DialogTitle></DialogHeader>
+        <div>
+          <Label>Team member</Label>
+          <Select value={who} onValueChange={setWho}>
+            <SelectTrigger className="mt-1.5"><SelectValue /></SelectTrigger>
+            <SelectContent>{team.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+          </Select>
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button onClick={() => {
+            prospectsStore.update(prospect.id, { assignedTo: who });
+            toast.success(`Assigned to ${who}`);
+            onClose();
+          }}>Assign</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
