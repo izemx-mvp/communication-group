@@ -29,10 +29,11 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const nav = [
-  { to: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/", label: "Tableau de bord", icon: LayoutDashboard, exact: true },
   { to: "/prospects", label: "Prospects", icon: Users },
-  { to: "/knowledge", label: "Knowledge Base", icon: BookOpen },
+  { to: "/knowledge", label: "Base de connaissances", icon: BookOpen },
 ];
+
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -81,15 +82,16 @@ export function AppShell({ children }: { children: ReactNode }) {
           <div className="rounded-xl bg-gradient-to-br from-accent to-card p-3">
             <div className="flex items-center gap-2 text-sm font-semibold">
               <Sparkles className="h-4 w-4 text-primary" />
-              AI Agent
+              Agent IA
             </div>
             <p className="mt-1 text-xs text-muted-foreground">
-              Live and answering customers using your published knowledge.
+              En ligne et répond aux clients avec votre contenu publié.
             </p>
             <div className="mt-2 flex items-center gap-1.5 text-[11px] font-medium text-success">
               <span className="h-1.5 w-1.5 rounded-full bg-success animate-pulse" />
-              Online
+              En ligne
             </div>
+
           </div>
         </div>
       </aside>
@@ -105,7 +107,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search prospects, articles, documents…"
+                placeholder="Rechercher prospects, articles, documents…"
                 className="pl-9 h-9 bg-muted/60 border-transparent focus-visible:bg-background"
               />
               <kbd className="hidden md:inline-flex absolute right-2 top-1/2 -translate-y-1/2 items-center gap-1 rounded border border-border bg-background px-1.5 py-0.5 text-[10px] text-muted-foreground">
@@ -127,20 +129,22 @@ export function AppShell({ children }: { children: ReactNode }) {
                     </Avatar>
                     <div className="hidden sm:block text-left leading-tight">
                       <div className="text-sm font-medium">Yassine A.</div>
-                      <div className="text-[11px] text-muted-foreground">Admin</div>
+                      <div className="text-[11px] text-muted-foreground">Administrateur</div>
                     </div>
+
                   </button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>My account</DropdownMenuLabel>
+                  <DropdownMenuLabel>Mon compte</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <Settings className="h-4 w-4 mr-2" /> Settings
+                    <Settings className="h-4 w-4 mr-2" /> Paramètres
                   </DropdownMenuItem>
                   <DropdownMenuItem>
-                    <LogOut className="h-4 w-4 mr-2" /> Sign out
+                    <LogOut className="h-4 w-4 mr-2" /> Se déconnecter
                   </DropdownMenuItem>
                 </DropdownMenuContent>
+
               </DropdownMenu>
             </div>
           </div>
@@ -179,19 +183,30 @@ export function PageHeader({
 export function StatusBadge({ status }: { status: string }) {
   const map: Record<string, string> = {
     Published: "bg-success/15 text-success border-success/20",
+    Publié: "bg-success/15 text-success border-success/20",
     Draft: "bg-muted text-muted-foreground border-border",
+    Brouillon: "bg-muted text-muted-foreground border-border",
     New: "bg-info/15 text-info border-info/20",
+    Nouveau: "bg-info/15 text-info border-info/20",
     Contacted: "bg-warning/15 text-warning-foreground border-warning/30",
+    Contacté: "bg-warning/15 text-warning-foreground border-warning/30",
     Qualified: "bg-accent text-accent-foreground border-primary/20",
+    Qualifié: "bg-accent text-accent-foreground border-primary/20",
     Won: "bg-success/15 text-success border-success/20",
+    Gagné: "bg-success/15 text-success border-success/20",
     Lost: "bg-destructive/10 text-destructive border-destructive/20",
+    Perdu: "bg-destructive/10 text-destructive border-destructive/20",
     Hot: "bg-primary/15 text-primary border-primary/30",
+    Chaud: "bg-primary/15 text-primary border-primary/30",
     Warm: "bg-warning/20 text-warning-foreground border-warning/30",
+    Tiède: "bg-warning/20 text-warning-foreground border-warning/30",
     Cold: "bg-info/10 text-info border-info/20",
+    Froid: "bg-info/10 text-info border-info/20",
   };
   return (
     <Badge variant="outline" className={cn("font-medium", map[status] || "")}>
       {status}
     </Badge>
   );
+
 }
