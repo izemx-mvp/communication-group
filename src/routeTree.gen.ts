@@ -9,38 +9,186 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ProspectsRouteImport } from './routes/prospects'
+import { Route as KnowledgeRouteImport } from './routes/knowledge'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProspectsIndexRouteImport } from './routes/prospects.index'
+import { Route as KnowledgeIndexRouteImport } from './routes/knowledge.index'
+import { Route as ProspectsIdRouteImport } from './routes/prospects.$id'
+import { Route as KnowledgeServicesRouteImport } from './routes/knowledge.services'
+import { Route as KnowledgeLocationsRouteImport } from './routes/knowledge.locations'
+import { Route as KnowledgeFaqRouteImport } from './routes/knowledge.faq'
+import { Route as KnowledgeDocumentsRouteImport } from './routes/knowledge.documents'
+import { Route as KnowledgeContactRouteImport } from './routes/knowledge.contact'
+import { Route as KnowledgeBusinessHoursRouteImport } from './routes/knowledge.business-hours'
 
+const ProspectsRoute = ProspectsRouteImport.update({
+  id: '/prospects',
+  path: '/prospects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KnowledgeRoute = KnowledgeRouteImport.update({
+  id: '/knowledge',
+  path: '/knowledge',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProspectsIndexRoute = ProspectsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => ProspectsRoute,
+} as any)
+const KnowledgeIndexRoute = KnowledgeIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => KnowledgeRoute,
+} as any)
+const ProspectsIdRoute = ProspectsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ProspectsRoute,
+} as any)
+const KnowledgeServicesRoute = KnowledgeServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => KnowledgeRoute,
+} as any)
+const KnowledgeLocationsRoute = KnowledgeLocationsRouteImport.update({
+  id: '/locations',
+  path: '/locations',
+  getParentRoute: () => KnowledgeRoute,
+} as any)
+const KnowledgeFaqRoute = KnowledgeFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => KnowledgeRoute,
+} as any)
+const KnowledgeDocumentsRoute = KnowledgeDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
+  getParentRoute: () => KnowledgeRoute,
+} as any)
+const KnowledgeContactRoute = KnowledgeContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => KnowledgeRoute,
+} as any)
+const KnowledgeBusinessHoursRoute = KnowledgeBusinessHoursRouteImport.update({
+  id: '/business-hours',
+  path: '/business-hours',
+  getParentRoute: () => KnowledgeRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/knowledge': typeof KnowledgeRouteWithChildren
+  '/prospects': typeof ProspectsRouteWithChildren
+  '/knowledge/business-hours': typeof KnowledgeBusinessHoursRoute
+  '/knowledge/contact': typeof KnowledgeContactRoute
+  '/knowledge/documents': typeof KnowledgeDocumentsRoute
+  '/knowledge/faq': typeof KnowledgeFaqRoute
+  '/knowledge/locations': typeof KnowledgeLocationsRoute
+  '/knowledge/services': typeof KnowledgeServicesRoute
+  '/prospects/$id': typeof ProspectsIdRoute
+  '/knowledge/': typeof KnowledgeIndexRoute
+  '/prospects/': typeof ProspectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/knowledge/business-hours': typeof KnowledgeBusinessHoursRoute
+  '/knowledge/contact': typeof KnowledgeContactRoute
+  '/knowledge/documents': typeof KnowledgeDocumentsRoute
+  '/knowledge/faq': typeof KnowledgeFaqRoute
+  '/knowledge/locations': typeof KnowledgeLocationsRoute
+  '/knowledge/services': typeof KnowledgeServicesRoute
+  '/prospects/$id': typeof ProspectsIdRoute
+  '/knowledge': typeof KnowledgeIndexRoute
+  '/prospects': typeof ProspectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/knowledge': typeof KnowledgeRouteWithChildren
+  '/prospects': typeof ProspectsRouteWithChildren
+  '/knowledge/business-hours': typeof KnowledgeBusinessHoursRoute
+  '/knowledge/contact': typeof KnowledgeContactRoute
+  '/knowledge/documents': typeof KnowledgeDocumentsRoute
+  '/knowledge/faq': typeof KnowledgeFaqRoute
+  '/knowledge/locations': typeof KnowledgeLocationsRoute
+  '/knowledge/services': typeof KnowledgeServicesRoute
+  '/prospects/$id': typeof ProspectsIdRoute
+  '/knowledge/': typeof KnowledgeIndexRoute
+  '/prospects/': typeof ProspectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/knowledge'
+    | '/prospects'
+    | '/knowledge/business-hours'
+    | '/knowledge/contact'
+    | '/knowledge/documents'
+    | '/knowledge/faq'
+    | '/knowledge/locations'
+    | '/knowledge/services'
+    | '/prospects/$id'
+    | '/knowledge/'
+    | '/prospects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/knowledge/business-hours'
+    | '/knowledge/contact'
+    | '/knowledge/documents'
+    | '/knowledge/faq'
+    | '/knowledge/locations'
+    | '/knowledge/services'
+    | '/prospects/$id'
+    | '/knowledge'
+    | '/prospects'
+  id:
+    | '__root__'
+    | '/'
+    | '/knowledge'
+    | '/prospects'
+    | '/knowledge/business-hours'
+    | '/knowledge/contact'
+    | '/knowledge/documents'
+    | '/knowledge/faq'
+    | '/knowledge/locations'
+    | '/knowledge/services'
+    | '/prospects/$id'
+    | '/knowledge/'
+    | '/prospects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  KnowledgeRoute: typeof KnowledgeRouteWithChildren
+  ProspectsRoute: typeof ProspectsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/prospects': {
+      id: '/prospects'
+      path: '/prospects'
+      fullPath: '/prospects'
+      preLoaderRoute: typeof ProspectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/knowledge': {
+      id: '/knowledge'
+      path: '/knowledge'
+      fullPath: '/knowledge'
+      preLoaderRoute: typeof KnowledgeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +196,115 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/prospects/': {
+      id: '/prospects/'
+      path: '/'
+      fullPath: '/prospects/'
+      preLoaderRoute: typeof ProspectsIndexRouteImport
+      parentRoute: typeof ProspectsRoute
+    }
+    '/knowledge/': {
+      id: '/knowledge/'
+      path: '/'
+      fullPath: '/knowledge/'
+      preLoaderRoute: typeof KnowledgeIndexRouteImport
+      parentRoute: typeof KnowledgeRoute
+    }
+    '/prospects/$id': {
+      id: '/prospects/$id'
+      path: '/$id'
+      fullPath: '/prospects/$id'
+      preLoaderRoute: typeof ProspectsIdRouteImport
+      parentRoute: typeof ProspectsRoute
+    }
+    '/knowledge/services': {
+      id: '/knowledge/services'
+      path: '/services'
+      fullPath: '/knowledge/services'
+      preLoaderRoute: typeof KnowledgeServicesRouteImport
+      parentRoute: typeof KnowledgeRoute
+    }
+    '/knowledge/locations': {
+      id: '/knowledge/locations'
+      path: '/locations'
+      fullPath: '/knowledge/locations'
+      preLoaderRoute: typeof KnowledgeLocationsRouteImport
+      parentRoute: typeof KnowledgeRoute
+    }
+    '/knowledge/faq': {
+      id: '/knowledge/faq'
+      path: '/faq'
+      fullPath: '/knowledge/faq'
+      preLoaderRoute: typeof KnowledgeFaqRouteImport
+      parentRoute: typeof KnowledgeRoute
+    }
+    '/knowledge/documents': {
+      id: '/knowledge/documents'
+      path: '/documents'
+      fullPath: '/knowledge/documents'
+      preLoaderRoute: typeof KnowledgeDocumentsRouteImport
+      parentRoute: typeof KnowledgeRoute
+    }
+    '/knowledge/contact': {
+      id: '/knowledge/contact'
+      path: '/contact'
+      fullPath: '/knowledge/contact'
+      preLoaderRoute: typeof KnowledgeContactRouteImport
+      parentRoute: typeof KnowledgeRoute
+    }
+    '/knowledge/business-hours': {
+      id: '/knowledge/business-hours'
+      path: '/business-hours'
+      fullPath: '/knowledge/business-hours'
+      preLoaderRoute: typeof KnowledgeBusinessHoursRouteImport
+      parentRoute: typeof KnowledgeRoute
+    }
   }
 }
 
+interface KnowledgeRouteChildren {
+  KnowledgeBusinessHoursRoute: typeof KnowledgeBusinessHoursRoute
+  KnowledgeContactRoute: typeof KnowledgeContactRoute
+  KnowledgeDocumentsRoute: typeof KnowledgeDocumentsRoute
+  KnowledgeFaqRoute: typeof KnowledgeFaqRoute
+  KnowledgeLocationsRoute: typeof KnowledgeLocationsRoute
+  KnowledgeServicesRoute: typeof KnowledgeServicesRoute
+  KnowledgeIndexRoute: typeof KnowledgeIndexRoute
+}
+
+const KnowledgeRouteChildren: KnowledgeRouteChildren = {
+  KnowledgeBusinessHoursRoute: KnowledgeBusinessHoursRoute,
+  KnowledgeContactRoute: KnowledgeContactRoute,
+  KnowledgeDocumentsRoute: KnowledgeDocumentsRoute,
+  KnowledgeFaqRoute: KnowledgeFaqRoute,
+  KnowledgeLocationsRoute: KnowledgeLocationsRoute,
+  KnowledgeServicesRoute: KnowledgeServicesRoute,
+  KnowledgeIndexRoute: KnowledgeIndexRoute,
+}
+
+const KnowledgeRouteWithChildren = KnowledgeRoute._addFileChildren(
+  KnowledgeRouteChildren,
+)
+
+interface ProspectsRouteChildren {
+  ProspectsIdRoute: typeof ProspectsIdRoute
+  ProspectsIndexRoute: typeof ProspectsIndexRoute
+}
+
+const ProspectsRouteChildren: ProspectsRouteChildren = {
+  ProspectsIdRoute: ProspectsIdRoute,
+  ProspectsIndexRoute: ProspectsIndexRoute,
+}
+
+const ProspectsRouteWithChildren = ProspectsRoute._addFileChildren(
+  ProspectsRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  KnowledgeRoute: KnowledgeRouteWithChildren,
+  ProspectsRoute: ProspectsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
