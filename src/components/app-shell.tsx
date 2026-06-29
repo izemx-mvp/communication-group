@@ -1,4 +1,6 @@
+import n7LogoAsset from "@/assets/n7-logo.png.asset.json";
 import { Link, useRouterState } from "@tanstack/react-router";
+
 import {
   LayoutDashboard,
   Users,
