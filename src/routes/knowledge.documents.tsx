@@ -29,9 +29,9 @@ const extFormat: Record<string, DocItem["format"]> = {
 };
 
 function humanSize(bytes: number) {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
-  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+  if (bytes < 1024) return `${bytes} o`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} Ko`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} Mo`;
 }
 
 function DocumentsPage() {
@@ -56,8 +56,8 @@ function DocumentsPage() {
       return {
         id: `d_${Date.now()}_${i}`,
         title: f.name.replace(/\.[^.]+$/, ""),
-        category: "Uncategorized",
-        description: "Uploaded document",
+        category: "Non catégorisé",
+        description: "Document téléversé",
         format: extFormat[ext] ?? "PDF",
         size: humanSize(f.size),
         status: "Draft",
@@ -66,7 +66,7 @@ function DocumentsPage() {
       };
     });
     setList((l) => [...items, ...l]);
-    toast.success(`${items.length} document(s) uploaded`);
+    toast.success(`${items.length} document(s) téléversé(s)`);
   }
 
   function replace(files: FileList | null) {
@@ -77,7 +77,7 @@ function DocumentsPage() {
       ? { ...d, size: humanSize(f.size), updatedAt: today }
       : d
     ));
-    toast.success("Document replaced");
+    toast.success("Document remplacé");
     setReplaceId(null);
     if (replaceRef.current) replaceRef.current.value = "";
   }
@@ -85,7 +85,7 @@ function DocumentsPage() {
   function remove() {
     if (!deleteId) return;
     setList((l) => l.filter((d) => d.id !== deleteId));
-    toast.success("Document deleted");
+    toast.success("Document supprimé");
     setDeleteId(null);
   }
 
@@ -106,17 +106,17 @@ function DocumentsPage() {
         <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-primary/10 text-primary mb-3">
           <Upload className="h-5 w-5" />
         </div>
-        <div className="font-medium">Drop files here or click to upload</div>
+        <div className="font-medium">Déposez des fichiers ici ou cliquez pour téléverser</div>
         <div className="text-sm text-muted-foreground mt-1">
-          PDF, DOCX, XLSX, PPTX, CSV, TXT — up to 25MB
+          PDF, DOCX, XLSX, PPTX, CSV, TXT — jusqu'à 25 Mo
         </div>
-        <Button type="button" className="mt-4" onClick={(e) => { e.stopPropagation(); fileRef.current?.click(); }}>Browse files</Button>
+        <Button type="button" className="mt-4" onClick={(e) => { e.stopPropagation(); fileRef.current?.click(); }}>Parcourir les fichiers</Button>
       </div>
 
       <div className="flex flex-wrap items-center gap-3">
         <div className="relative flex-1 min-w-[200px]">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search documents…" className="pl-9" />
+          <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Rechercher des documents…" className="pl-9" />
         </div>
       </div>
 
@@ -126,12 +126,12 @@ function DocumentsPage() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Title</TableHead>
-                  <TableHead>Category</TableHead>
+                  <TableHead>Titre</TableHead>
+                  <TableHead>Catégorie</TableHead>
                   <TableHead>Format</TableHead>
-                  <TableHead className="hidden md:table-cell">Size</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead className="hidden md:table-cell">Updated</TableHead>
+                  <TableHead className="hidden md:table-cell">Taille</TableHead>
+                  <TableHead>Statut</TableHead>
+                  <TableHead className="hidden md:table-cell">Mis à jour</TableHead>
                   <TableHead className="text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -152,7 +152,7 @@ function DocumentsPage() {
                     <TableCell>{d.category}</TableCell>
                     <TableCell><span className="text-xs font-medium px-2 py-0.5 rounded bg-muted">{d.format}</span></TableCell>
                     <TableCell className="hidden md:table-cell text-muted-foreground">{d.size}</TableCell>
-                    <TableCell><StatusBadge status={d.status} /></TableCell>
+                    <TableCell><StatusBadge status={d.status === "Published" ? "Publié" : "Brouillon"} /></TableCell>
                     <TableCell className="hidden md:table-cell text-sm text-muted-foreground">{d.updatedAt}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end gap-1">
@@ -173,11 +173,11 @@ function DocumentsPage() {
         <DialogContent className="sm:max-w-[520px]">
           <DialogHeader>
             <DialogTitle>{preview?.title}</DialogTitle>
-            <DialogDescription>{preview?.format} · {preview?.size} · Updated {preview?.updatedAt}</DialogDescription>
+            <DialogDescription>{preview?.format} · {preview?.size} · Mis à jour le {preview?.updatedAt}</DialogDescription>
           </DialogHeader>
           <div className="rounded-lg border border-border bg-muted/40 p-6 text-sm text-muted-foreground">
             <div className="font-medium text-foreground mb-1">{preview?.description}</div>
-            Document preview is not available in this demo. The AI will use the latest published version when answering customer questions.
+            L'aperçu du document n'est pas disponible dans cette démo. L'IA utilisera la dernière version publiée pour répondre aux clients.
           </div>
         </DialogContent>
       </Dialog>
@@ -185,12 +185,12 @@ function DocumentsPage() {
       <AlertDialog open={!!deleteId} onOpenChange={(o) => !o && setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this document?</AlertDialogTitle>
-            <AlertDialogDescription>The AI will stop using it immediately.</AlertDialogDescription>
+            <AlertDialogTitle>Supprimer ce document ?</AlertDialogTitle>
+            <AlertDialogDescription>L'IA cessera immédiatement de l'utiliser.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={remove}>Delete</AlertDialogAction>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={remove}>Supprimer</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

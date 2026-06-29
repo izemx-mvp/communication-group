@@ -32,27 +32,27 @@ function LocationsPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   function save(l: Location) {
-    if (!l.name.trim() || !l.address.trim()) { toast.error("Name and address are required"); return; }
+    if (!l.name.trim() || !l.address.trim()) { toast.error("Nom et adresse requis"); return; }
     if (l.id) {
       setList((arr) => arr.map((x) => (x.id === l.id ? l : x)));
-      toast.success("Location updated");
+      toast.success("Emplacement mis à jour");
     } else {
       setList((arr) => [{ ...l, id: `l_${Date.now()}` }, ...arr]);
-      toast.success("Location created");
+      toast.success("Emplacement créé");
     }
     setEditing(null);
   }
   function remove() {
     if (!deleteId) return;
     setList((arr) => arr.filter((x) => x.id !== deleteId));
-    toast.success("Location deleted");
+    toast.success("Emplacement supprimé");
     setDeleteId(null);
   }
 
   return (
     <div className="space-y-4">
       <div className="flex justify-end">
-        <Button onClick={() => setEditing({ ...empty })}><Plus className="h-4 w-4 mr-1.5" /> New location</Button>
+        <Button onClick={() => setEditing({ ...empty })}><Plus className="h-4 w-4 mr-1.5" /> Nouvel emplacement</Button>
       </div>
       <div className="grid md:grid-cols-2 gap-4">
         {list.map((l) => (
@@ -82,7 +82,7 @@ function LocationsPage() {
               </div>
               {l.notes && <p className="text-xs text-muted-foreground bg-muted/40 rounded-md p-2">{l.notes}</p>}
               <Button asChild variant="outline" size="sm" className="w-full">
-                <a href={l.mapsUrl} target="_blank" rel="noreferrer">Open in Maps <ExternalLink className="h-3.5 w-3.5 ml-1.5" /></a>
+                <a href={l.mapsUrl} target="_blank" rel="noreferrer">Ouvrir dans Maps <ExternalLink className="h-3.5 w-3.5 ml-1.5" /></a>
               </Button>
             </CardContent>
           </Card>
@@ -94,12 +94,12 @@ function LocationsPage() {
       <AlertDialog open={!!deleteId} onOpenChange={(o) => !o && setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this location?</AlertDialogTitle>
-            <AlertDialogDescription>It will no longer be shared by the AI Customer Service Agent.</AlertDialogDescription>
+            <AlertDialogTitle>Supprimer cet emplacement ?</AlertDialogTitle>
+            <AlertDialogDescription>Il ne sera plus communiqué par l'Agent IA.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={remove}>Delete</AlertDialogAction>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={remove}>Supprimer</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
@@ -114,29 +114,29 @@ function LocationDialog({ loc, onClose, onSave }: { loc: Location | null; onClos
   return (
     <Dialog open={!!loc} onOpenChange={(o) => !o && onClose()}>
       <DialogContent className="sm:max-w-[560px]">
-        <DialogHeader><DialogTitle>{loc?.id ? "Edit location" : "New location"}</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>{loc?.id ? "Modifier l'emplacement" : "Nouvel emplacement"}</DialogTitle></DialogHeader>
         <div className="space-y-3">
           <div>
-            <Label>Name</Label>
-            <Input value={d.name} onChange={(e) => setD({ ...d, name: e.target.value })} placeholder="e.g. N7 Headquarters" />
+            <Label>Nom</Label>
+            <Input value={d.name} onChange={(e) => setD({ ...d, name: e.target.value })} placeholder="ex. Siège N7" />
           </div>
           <div>
-            <Label>Address</Label>
+            <Label>Adresse</Label>
             <Input value={d.address} onChange={(e) => setD({ ...d, address: e.target.value })} />
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label>City</Label>
+              <Label>Ville</Label>
               <Input value={d.city} onChange={(e) => setD({ ...d, city: e.target.value })} />
             </div>
             <div>
-              <Label>Country</Label>
+              <Label>Pays</Label>
               <Input value={d.country} onChange={(e) => setD({ ...d, country: e.target.value })} />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <Label>Phone</Label>
+              <Label>Téléphone</Label>
               <Input value={d.phone} onChange={(e) => setD({ ...d, phone: e.target.value })} />
             </div>
             <div>
@@ -145,7 +145,7 @@ function LocationDialog({ loc, onClose, onSave }: { loc: Location | null; onClos
             </div>
           </div>
           <div>
-            <Label>Maps URL</Label>
+            <Label>URL Maps</Label>
             <Input value={d.mapsUrl} onChange={(e) => setD({ ...d, mapsUrl: e.target.value })} />
           </div>
           <div>
@@ -154,8 +154,8 @@ function LocationDialog({ loc, onClose, onSave }: { loc: Location | null; onClos
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button onClick={() => onSave(d)}>Save</Button>
+          <Button variant="outline" onClick={onClose}>Annuler</Button>
+          <Button onClick={() => onSave(d)}>Enregistrer</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

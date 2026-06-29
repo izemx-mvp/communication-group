@@ -39,19 +39,20 @@ import { Button } from "@/components/ui/button";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Dashboard — N7 Back Office" },
-      { name: "description", content: "Overview of prospects, conversations and AI performance." },
+      { title: "Tableau de bord — N7 Back Office" },
+      { name: "description", content: "Vue d'ensemble des prospects, conversations et performances de l'IA." },
     ],
   }),
   component: Dashboard,
 });
 
 const kpis = [
-  { label: "Total Prospects", value: "1,284", change: "+12.4%", icon: Users, tone: "primary" as const },
-  { label: "Hot Leads", value: "187", change: "+8.1%", icon: Flame, tone: "warning" as const },
-  { label: "Conversations Today", value: "342", change: "+24%", icon: MessageCircle, tone: "info" as const },
-  { label: "AI Response Rate", value: "96.2%", change: "+1.4%", icon: Bot, tone: "success" as const },
+  { label: "Total des prospects", value: "1 284", change: "+12,4 %", icon: Users, tone: "primary" as const },
+  { label: "Prospects chauds", value: "187", change: "+8,1 %", icon: Flame, tone: "warning" as const },
+  { label: "Conversations aujourd'hui", value: "342", change: "+24 %", icon: MessageCircle, tone: "info" as const },
+  { label: "Taux de réponse IA", value: "96,2 %", change: "+1,4 %", icon: Bot, tone: "success" as const },
 ];
+
 
 const activityIcons: Record<string, typeof UserPlus> = {
   prospect: UserPlus,
@@ -67,16 +68,17 @@ function Dashboard() {
   return (
     <div>
       <PageHeader
-        title="Dashboard"
-        description="A quick pulse on your prospects and AI performance."
+        title="Tableau de bord"
+        description="Un aperçu rapide de vos prospects et des performances de l'IA."
         actions={
           <Button asChild>
             <Link to="/prospects">
-              View all prospects <ArrowUpRight className="ml-1.5 h-4 w-4" />
+              Voir tous les prospects <ArrowUpRight className="ml-1.5 h-4 w-4" />
             </Link>
           </Button>
         }
       />
+
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {kpis.map((k, i) => (
@@ -95,7 +97,7 @@ function Dashboard() {
                   </div>
                 </div>
                 <div className="mt-3 text-2xl font-semibold tracking-tight">{k.value}</div>
-                <div className="mt-1 text-xs font-medium text-success">{k.change} vs last week</div>
+                <div className="mt-1 text-xs font-medium text-success">{k.change} vs semaine dernière</div>
               </CardContent>
             </Card>
           </motion.div>
@@ -106,11 +108,11 @@ function Dashboard() {
         <Card className="lg:col-span-2 shadow-soft">
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle className="text-base">Recent Prospects</CardTitle>
-              <p className="text-sm text-muted-foreground mt-0.5">Latest submissions across all channels</p>
+              <CardTitle className="text-base">Prospects récents</CardTitle>
+              <p className="text-sm text-muted-foreground mt-0.5">Dernières soumissions sur tous les canaux</p>
             </div>
             <Button asChild variant="ghost" size="sm">
-              <Link to="/prospects">See all</Link>
+              <Link to="/prospects">Voir tout</Link>
             </Button>
           </CardHeader>
           <CardContent className="p-0">
@@ -118,15 +120,16 @@ function Dashboard() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Full Name</TableHead>
-                    <TableHead>Company</TableHead>
+                    <TableHead>Nom complet</TableHead>
+                    <TableHead>Société</TableHead>
                     <TableHead className="hidden md:table-cell">Email</TableHead>
                     <TableHead>Source</TableHead>
-                    <TableHead>Lead Score</TableHead>
-                    <TableHead>Status</TableHead>
+                    <TableHead>Score</TableHead>
+                    <TableHead>Statut</TableHead>
                     <TableHead className="hidden lg:table-cell">Date</TableHead>
                   </TableRow>
                 </TableHeader>
+
                 <TableBody>
                   {recent.map((p) => (
                     <TableRow key={p.id} className="hover:bg-muted/40">
@@ -141,8 +144,9 @@ function Dashboard() {
                       <TableCell><StatusBadge status={p.score} /></TableCell>
                       <TableCell><StatusBadge status={p.status} /></TableCell>
                       <TableCell className="hidden lg:table-cell text-muted-foreground text-sm">
-                        {new Date(p.date).toLocaleDateString()}
+                        {new Date(p.date).toLocaleDateString("fr-FR")}
                       </TableCell>
+
                     </TableRow>
                   ))}
                 </TableBody>
@@ -153,9 +157,10 @@ function Dashboard() {
 
         <Card className="shadow-soft">
           <CardHeader>
-            <CardTitle className="text-base">Recent Activity</CardTitle>
-            <p className="text-sm text-muted-foreground">Latest events across the back office</p>
+            <CardTitle className="text-base">Activité récente</CardTitle>
+            <p className="text-sm text-muted-foreground">Derniers événements du back office</p>
           </CardHeader>
+
           <CardContent>
             <ol className="relative space-y-4 ml-2">
               {activities.map((a) => {
@@ -178,9 +183,10 @@ function Dashboard() {
 
       <Card className="mt-6 shadow-soft">
         <CardHeader>
-          <CardTitle className="text-base">Lead Sources</CardTitle>
-          <p className="text-sm text-muted-foreground">Where prospects are coming from</p>
+          <CardTitle className="text-base">Sources des prospects</CardTitle>
+          <p className="text-sm text-muted-foreground">D'où viennent vos prospects</p>
         </CardHeader>
+
         <CardContent>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">

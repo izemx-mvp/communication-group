@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import {
   type LeadStatus, type LeadSource, type LeadScore, type Prospect,
+  statusLabel, sourceLabel, scoreLabel,
 } from "@/lib/mock-data";
 import { prospectsStore, useProspects } from "@/lib/prospects-store";
 
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/prospects/")({
   head: () => ({
     meta: [
       { title: "Prospects — N7 Back Office" },
-      { name: "description", content: "CRM list of every submitted contact form." },
+      { name: "description", content: "Liste CRM de chaque formulaire de contact soumis." },
     ],
   }),
   component: ProspectsList,
@@ -36,7 +37,8 @@ export const Route = createFileRoute("/prospects/")({
 const statuses: LeadStatus[] = ["New", "Contacted", "Qualified", "Won", "Lost"];
 const sources: LeadSource[] = ["Website", "WhatsApp", "Facebook", "Instagram", "LinkedIn"];
 const scores: LeadScore[] = ["Cold", "Warm", "Hot"];
-const team = ["Yassine A.", "Fatima Z.", "Hicham B.", "Unassigned"];
+const team = ["Yassine A.", "Fatima Z.", "Hicham B.", "Non assigné"];
+
 
 function ProspectsList() {
   const data = useProspects();
@@ -64,21 +66,21 @@ function ProspectsList() {
     a.href = url; a.download = `prospects-${new Date().toISOString().slice(0, 10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success(`Exported ${filtered.length} prospect(s)`);
+    toast.success(`${filtered.length} prospect(s) exporté(s)`);
   }
 
   return (
     <div>
       <PageHeader
         title="Prospects"
-        description={`${filtered.length} of ${data.length} contacts`}
+        description={`${filtered.length} sur ${data.length} contacts`}
         actions={
           <>
             <Button variant="outline" size="sm" onClick={exportCsv}>
-              <Download className="h-4 w-4 mr-1.5" /> Export
+              <Download className="h-4 w-4 mr-1.5" /> Exporter
             </Button>
             <Button size="sm" onClick={() => setOpen(true)}>
-              <Plus className="h-4 w-4 mr-1.5" /> New prospect
+              <Plus className="h-4 w-4 mr-1.5" /> Nouveau prospect
             </Button>
           </>
         }
@@ -89,22 +91,23 @@ function ProspectsList() {
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative flex-1 min-w-[220px]">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search by name, email, company…" className="pl-9" />
+              <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Rechercher par nom, email, société…" className="pl-9" />
             </div>
             <Select value={status} onValueChange={setStatus}>
-              <SelectTrigger className="w-[160px]"><SelectValue placeholder="Status" /></SelectTrigger>
+              <SelectTrigger className="w-[160px]"><SelectValue placeholder="Statut" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All statuses</SelectItem>
-                {statuses.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                <SelectItem value="all">Tous les statuts</SelectItem>
+                {statuses.map((s) => <SelectItem key={s} value={s}>{statusLabel[s]}</SelectItem>)}
               </SelectContent>
             </Select>
             <Select value={source} onValueChange={setSource}>
               <SelectTrigger className="w-[160px]"><SelectValue placeholder="Source" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All sources</SelectItem>
-                {sources.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}
+                <SelectItem value="all">Toutes les sources</SelectItem>
+                {sources.map((s) => <SelectItem key={s} value={s}>{sourceLabel[s]}</SelectItem>)}
               </SelectContent>
             </Select>
+
           </div>
 
           <div className="overflow-x-auto rounded-lg border border-border">
@@ -120,7 +123,7 @@ function ProspectsList() {
                   <TableHead className="hidden xl:table-cell">Ville</TableHead>
                   <TableHead>Source</TableHead>
                   <TableHead>Score</TableHead>
-                  <TableHead>Status</TableHead>
+                  <TableHead>Statut</TableHead>
                   <TableHead className="hidden md:table-cell">Date</TableHead>
                 </TableRow>
               </TableHeader>
@@ -128,7 +131,7 @@ function ProspectsList() {
                 {filtered.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={11} className="text-center py-12 text-muted-foreground">
-                      No prospects match your filters.
+                      Aucun prospect ne correspond à vos filtres.
                     </TableCell>
                   </TableRow>
                 ) : filtered.map((p) => (
@@ -144,15 +147,16 @@ function ProspectsList() {
                     <TableCell className="hidden lg:table-cell text-muted-foreground">{p.telephone}</TableCell>
                     <TableCell className="hidden lg:table-cell">{p.pays}</TableCell>
                     <TableCell className="hidden xl:table-cell">{p.ville}</TableCell>
-                    <TableCell>{p.source}</TableCell>
-                    <TableCell><StatusBadge status={p.score} /></TableCell>
-                    <TableCell><StatusBadge status={p.status} /></TableCell>
+                    <TableCell>{sourceLabel[p.source] ?? p.source}</TableCell>
+                    <TableCell><StatusBadge status={scoreLabel[p.score] ?? p.score} /></TableCell>
+                    <TableCell><StatusBadge status={statusLabel[p.status] ?? p.status} /></TableCell>
                     <TableCell className="hidden md:table-cell text-sm text-muted-foreground">
-                      {new Date(p.date).toLocaleDateString()}
+                      {new Date(p.date).toLocaleDateString("fr-FR")}
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
+
             </Table>
           </div>
         </CardContent>
@@ -166,8 +170,8 @@ function ProspectsList() {
 function NewProspectDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const empty: Omit<Prospect, "id" | "date"> = {
     nom: "", prenom: "", societe: "", email: "", telephone: "",
-    pays: "Morocco", ville: "Casablanca", source: "Website",
-    score: "Warm", status: "New", message: "", assignedTo: "Unassigned", notes: "",
+    pays: "Maroc", ville: "Casablanca", source: "Website",
+    score: "Warm", status: "New", message: "", assignedTo: "Non assigné", notes: "",
   };
   const [d, setD] = useState(empty);
 
@@ -176,7 +180,7 @@ function NewProspectDialog({ open, onClose }: { open: boolean; onClose: () => vo
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) { reset(); onClose(); } }}>
       <DialogContent className="sm:max-w-[640px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader><DialogTitle>New prospect</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>Nouveau prospect</DialogTitle></DialogHeader>
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div><Label>Prénom</Label><Input value={d.prenom} onChange={(e) => setD({ ...d, prenom: e.target.value })} /></div>
@@ -196,26 +200,26 @@ function NewProspectDialog({ open, onClose }: { open: boolean; onClose: () => vo
               <Label>Source</Label>
               <Select value={d.source} onValueChange={(v: LeadSource) => setD({ ...d, source: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{sources.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                <SelectContent>{sources.map((s) => <SelectItem key={s} value={s}>{sourceLabel[s]}</SelectItem>)}</SelectContent>
               </Select>
             </div>
             <div>
               <Label>Score</Label>
               <Select value={d.score} onValueChange={(v: LeadScore) => setD({ ...d, score: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{scores.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                <SelectContent>{scores.map((s) => <SelectItem key={s} value={s}>{scoreLabel[s]}</SelectItem>)}</SelectContent>
               </Select>
             </div>
             <div>
-              <Label>Status</Label>
+              <Label>Statut</Label>
               <Select value={d.status} onValueChange={(v: LeadStatus) => setD({ ...d, status: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{statuses.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                <SelectContent>{statuses.map((s) => <SelectItem key={s} value={s}>{statusLabel[s]}</SelectItem>)}</SelectContent>
               </Select>
             </div>
           </div>
           <div>
-            <Label>Assigned to</Label>
+            <Label>Assigné à</Label>
             <Select value={d.assignedTo} onValueChange={(v) => setD({ ...d, assignedTo: v })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>{team.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
@@ -224,16 +228,17 @@ function NewProspectDialog({ open, onClose }: { open: boolean; onClose: () => vo
           <div><Label>Message</Label><Textarea rows={3} value={d.message} onChange={(e) => setD({ ...d, message: e.target.value })} /></div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={() => { reset(); onClose(); }}>Cancel</Button>
+          <Button variant="outline" onClick={() => { reset(); onClose(); }}>Annuler</Button>
           <Button onClick={() => {
-            if (!d.nom || !d.prenom || !d.email) { toast.error("Name and email are required"); return; }
+            if (!d.nom || !d.prenom || !d.email) { toast.error("Nom et email requis"); return; }
             prospectsStore.add(d);
-            toast.success("Prospect added");
+            toast.success("Prospect ajouté");
             reset();
             onClose();
-          }}>Create</Button>
+          }}>Créer</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
+

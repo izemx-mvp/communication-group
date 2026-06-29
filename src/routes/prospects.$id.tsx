@@ -25,21 +25,23 @@ import {
 } from "@/components/ui/select";
 import {
   type LeadScore, type LeadSource, type LeadStatus, type Prospect,
+  statusLabel, scoreLabel, sourceLabel,
 } from "@/lib/mock-data";
 import { prospectsStore, useProspects } from "@/lib/prospects-store";
 
 export const Route = createFileRoute("/prospects/$id")({
-  head: () => ({ meta: [{ title: "Prospect detail — N7 Back Office" }] }),
+  head: () => ({ meta: [{ title: "Détail du prospect — N7 Back Office" }] }),
   component: ProspectDetail,
   notFoundComponent: () => (
-    <div className="p-8 text-center text-muted-foreground">Prospect not found.</div>
+    <div className="p-8 text-center text-muted-foreground">Prospect introuvable.</div>
   ),
 });
 
 const statuses: LeadStatus[] = ["New", "Contacted", "Qualified", "Won", "Lost"];
 const sources: LeadSource[] = ["Website", "WhatsApp", "Facebook", "Instagram", "LinkedIn"];
 const scores: LeadScore[] = ["Cold", "Warm", "Hot"];
-const team = ["Yassine A.", "Fatima Z.", "Hicham B.", "Unassigned"];
+const team = ["Yassine A.", "Fatima Z.", "Hicham B.", "Non assigné"];
+
 
 function ProspectDetail() {
   const { id } = useParams({ from: "/prospects/$id" });
@@ -52,13 +54,13 @@ function ProspectDetail() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [note, setNote] = useState(p?.notes ?? "");
 
-  if (!p) return <div className="p-8 text-center text-muted-foreground">Prospect not found.</div>;
+  if (!p) return <div className="p-8 text-center text-muted-foreground">Prospect introuvable.</div>;
   const initials = `${p.prenom[0]}${p.nom[0]}`;
 
   return (
     <div>
       <Link to="/prospects" className="inline-flex items-center text-sm text-muted-foreground hover:text-foreground mb-4">
-        <ArrowLeft className="h-4 w-4 mr-1.5" /> Back to prospects
+        <ArrowLeft className="h-4 w-4 mr-1.5" /> Retour aux prospects
       </Link>
 
       <PageHeader
@@ -67,17 +69,18 @@ function ProspectDetail() {
         actions={
           <>
             <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
-              <Edit className="h-4 w-4 mr-1.5" /> Edit
+              <Edit className="h-4 w-4 mr-1.5" /> Modifier
             </Button>
             <Button variant="outline" size="sm" onClick={() => setAssignOpen(true)}>
-              <UserCheck className="h-4 w-4 mr-1.5" /> Assign
+              <UserCheck className="h-4 w-4 mr-1.5" /> Assigner
             </Button>
             <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setDeleteOpen(true)}>
-              <Trash2 className="h-4 w-4 mr-1.5" /> Delete
+              <Trash2 className="h-4 w-4 mr-1.5" /> Supprimer
             </Button>
           </>
         }
       />
+
 
       <div className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
@@ -89,8 +92,8 @@ function ProspectDetail() {
               <div className="min-w-0">
                 <CardTitle className="text-lg">{p.prenom} {p.nom}</CardTitle>
                 <div className="flex flex-wrap gap-2 mt-1">
-                  <StatusBadge status={p.status} />
-                  <StatusBadge status={p.score} />
+                  <StatusBadge status={statusLabel[p.status] ?? p.status} />
+                  <StatusBadge status={scoreLabel[p.score] ?? p.score} />
                 </div>
               </div>
             </CardHeader>
@@ -100,7 +103,7 @@ function ProspectDetail() {
                 <InfoRow icon={Mail} label="Email" value={p.email} />
                 <InfoRow icon={Phone} label="Téléphone" value={p.telephone} />
                 <InfoRow icon={MapPin} label="Localisation" value={`${p.ville}, ${p.pays}`} />
-                <InfoRow icon={Calendar} label="Reçu le" value={new Date(p.date).toLocaleString()} />
+                <InfoRow icon={Calendar} label="Reçu le" value={new Date(p.date).toLocaleString("fr-FR")} />
               </div>
               <Separator />
               <div>
@@ -111,14 +114,14 @@ function ProspectDetail() {
           </Card>
 
           <Card className="shadow-soft">
-            <CardHeader><CardTitle className="text-base">Internal notes</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-base">Notes internes</CardTitle></CardHeader>
             <CardContent>
-              <Textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Add a private note for your team…" rows={4} />
+              <Textarea value={note} onChange={(e) => setNote(e.target.value)} placeholder="Ajouter une note privée pour votre équipe…" rows={4} />
               <div className="flex justify-end mt-3">
                 <Button size="sm" onClick={() => {
                   prospectsStore.update(p.id, { notes: note });
-                  toast.success("Note saved");
-                }}>Save note</Button>
+                  toast.success("Note enregistrée");
+                }}>Enregistrer la note</Button>
               </div>
             </CardContent>
           </Card>
@@ -126,25 +129,26 @@ function ProspectDetail() {
 
         <div className="space-y-6">
           <Card className="shadow-soft">
-            <CardHeader><CardTitle className="text-base">Internal information</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-base">Informations internes</CardTitle></CardHeader>
             <CardContent className="space-y-3 text-sm">
-              <KV k="Lead Score" v={<StatusBadge status={p.score} />} />
-              <KV k="Status" v={<StatusBadge status={p.status} />} />
-              <KV k="Source" v={p.source} />
-              <KV k="Assigned to" v={p.assignedTo} />
-              <KV k="Created at" v={new Date(p.date).toLocaleDateString()} />
+              <KV k="Score" v={<StatusBadge status={scoreLabel[p.score] ?? p.score} />} />
+              <KV k="Statut" v={<StatusBadge status={statusLabel[p.status] ?? p.status} />} />
+              <KV k="Source" v={sourceLabel[p.source] ?? p.source} />
+              <KV k="Assigné à" v={p.assignedTo} />
+              <KV k="Créé le" v={new Date(p.date).toLocaleDateString("fr-FR")} />
             </CardContent>
           </Card>
 
           <Card className="shadow-soft bg-gradient-to-br from-accent to-card">
             <CardContent className="p-5">
-              <div className="text-sm font-semibold">AI suggestion</div>
+              <div className="text-sm font-semibold">Suggestion de l'IA</div>
               <p className="text-sm text-muted-foreground mt-1">
-                This prospect is marked <strong>{p.score}</strong>. Consider a personalized follow-up within 24 hours to maintain momentum.
+                Ce prospect est marqué <strong>{scoreLabel[p.score] ?? p.score}</strong>. Pensez à un suivi personnalisé sous 24 heures pour maintenir l'élan.
               </p>
             </CardContent>
           </Card>
         </div>
+
       </div>
 
       <EditDialog open={editOpen} onClose={() => setEditOpen(false)} prospect={p} />
@@ -153,19 +157,20 @@ function ProspectDetail() {
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete this prospect?</AlertDialogTitle>
-            <AlertDialogDescription>This action cannot be undone.</AlertDialogDescription>
+            <AlertDialogTitle>Supprimer ce prospect ?</AlertDialogTitle>
+            <AlertDialogDescription>Cette action est irréversible.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
             <AlertDialogAction onClick={() => {
               prospectsStore.remove(p.id);
-              toast.success("Prospect deleted");
+              toast.success("Prospect supprimé");
               navigate({ to: "/prospects" });
-            }}>Delete</AlertDialogAction>
+            }}>Supprimer</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
     </div>
   );
 }
@@ -176,7 +181,7 @@ function EditDialog({ open, onClose, prospect }: { open: boolean; onClose: () =>
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
       <DialogContent className="sm:max-w-[640px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader><DialogTitle>Edit prospect</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>Modifier le prospect</DialogTitle></DialogHeader>
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div><Label>Prénom</Label><Input value={d.prenom} onChange={(e) => setD({ ...d, prenom: e.target.value })} /></div>
@@ -196,32 +201,32 @@ function EditDialog({ open, onClose, prospect }: { open: boolean; onClose: () =>
               <Label>Source</Label>
               <Select value={d.source} onValueChange={(v: LeadSource) => setD({ ...d, source: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{sources.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                <SelectContent>{sources.map((s) => <SelectItem key={s} value={s}>{sourceLabel[s]}</SelectItem>)}</SelectContent>
               </Select>
             </div>
             <div>
               <Label>Score</Label>
               <Select value={d.score} onValueChange={(v: LeadScore) => setD({ ...d, score: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{scores.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                <SelectContent>{scores.map((s) => <SelectItem key={s} value={s}>{scoreLabel[s]}</SelectItem>)}</SelectContent>
               </Select>
             </div>
             <div>
-              <Label>Status</Label>
+              <Label>Statut</Label>
               <Select value={d.status} onValueChange={(v: LeadStatus) => setD({ ...d, status: v })}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>{statuses.map((s) => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                <SelectContent>{statuses.map((s) => <SelectItem key={s} value={s}>{statusLabel[s]}</SelectItem>)}</SelectContent>
               </Select>
             </div>
           </div>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>Annuler</Button>
           <Button onClick={() => {
             prospectsStore.update(d.id, d);
-            toast.success("Prospect updated");
+            toast.success("Prospect mis à jour");
             onClose();
-          }}>Save</Button>
+          }}>Enregistrer</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -233,26 +238,27 @@ function AssignDialog({ open, onClose, prospect }: { open: boolean; onClose: () 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
       <DialogContent className="sm:max-w-[420px]">
-        <DialogHeader><DialogTitle>Assign prospect</DialogTitle></DialogHeader>
+        <DialogHeader><DialogTitle>Assigner le prospect</DialogTitle></DialogHeader>
         <div>
-          <Label>Team member</Label>
+          <Label>Membre de l'équipe</Label>
           <Select value={who} onValueChange={setWho}>
             <SelectTrigger className="mt-1.5"><SelectValue /></SelectTrigger>
             <SelectContent>{team.map((t) => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
           </Select>
         </div>
         <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
+          <Button variant="outline" onClick={onClose}>Annuler</Button>
           <Button onClick={() => {
             prospectsStore.update(prospect.id, { assignedTo: who });
-            toast.success(`Assigned to ${who}`);
+            toast.success(`Assigné à ${who}`);
             onClose();
-          }}>Assign</Button>
+          }}>Assigner</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
   );
 }
+
 
 function InfoRow({ icon: Icon, label, value }: { icon: typeof Mail; label: string; value: string }) {
   return (

@@ -66,20 +66,31 @@ export const dailyConversations = Array.from({ length: 14 }).map((_, i) => {
   const d = new Date();
   d.setDate(d.getDate() - (13 - i));
   return {
-    day: d.toLocaleDateString("en", { weekday: "short" }),
+    day: d.toLocaleDateString("fr", { weekday: "short" }),
     conversations: 40 + Math.floor(Math.random() * 80),
     resolved: 30 + Math.floor(Math.random() * 60),
   };
 });
 
 export const activities = [
-  { id: 1, type: "prospect", title: "New prospect received", desc: "Sophie Benali — Atlas Studio (Website)", time: "2 min ago" },
-  { id: 2, type: "assign", title: "Prospect assigned", desc: "Karim Hassan → Yassine A.", time: "18 min ago" },
-  { id: 3, type: "knowledge", title: "Knowledge updated", desc: "Article 'Pricing FAQ' published", time: "1 h ago" },
-  { id: 4, type: "doc", title: "New document uploaded", desc: "Q4-pricing-guide.pdf added to Documents", time: "3 h ago" },
-  { id: 5, type: "hours", title: "Business hours updated", desc: "Friday closing changed to 17:00", time: "Yesterday" },
-  { id: 6, type: "prospect", title: "New prospect received", desc: "Omar Tazi — Lumen AI (LinkedIn)", time: "Yesterday" },
+  { id: 1, type: "prospect", title: "Nouveau prospect reçu", desc: "Sophie Benali — Atlas Studio (Site web)", time: "Il y a 2 min" },
+  { id: 2, type: "assign", title: "Prospect assigné", desc: "Karim Hassan → Yassine A.", time: "Il y a 18 min" },
+  { id: 3, type: "knowledge", title: "Connaissance mise à jour", desc: "Article « FAQ Tarifs » publié", time: "Il y a 1 h" },
+  { id: 4, type: "doc", title: "Nouveau document téléversé", desc: "guide-tarifs-T4.pdf ajouté aux Documents", time: "Il y a 3 h" },
+  { id: 5, type: "hours", title: "Horaires d'ouverture mis à jour", desc: "Fermeture du vendredi modifiée à 17h00", time: "Hier" },
+  { id: 6, type: "prospect", title: "Nouveau prospect reçu", desc: "Omar Tazi — Lumen AI (LinkedIn)", time: "Hier" },
 ];
+
+// French label helpers (data values stay in English for stable filtering)
+export const statusLabel: Record<string, string> = {
+  New: "Nouveau", Contacted: "Contacté", Qualified: "Qualifié", Won: "Gagné", Lost: "Perdu",
+};
+export const scoreLabel: Record<string, string> = { Hot: "Chaud", Warm: "Tiède", Cold: "Froid" };
+export const sourceLabel: Record<string, string> = {
+  Website: "Site web", WhatsApp: "WhatsApp", Facebook: "Facebook", Instagram: "Instagram", LinkedIn: "LinkedIn",
+};
+export const docStatusLabel: Record<string, string> = { Draft: "Brouillon", Published: "Publié" };
+
 
 export interface Article {
   id: string;
@@ -92,11 +103,12 @@ export interface Article {
 }
 
 export const articles: Article[] = [
-  { id: "a1", title: "Getting started with N7 AI Agent", category: "Onboarding", content: "Welcome to the N7 AI Agent. This guide walks through the first steps...", tags: ["intro", "setup"], status: "Published", updatedAt: "2026-06-22" },
-  { id: "a2", title: "Pricing & plans overview", category: "Pricing", content: "We offer Starter, Growth and Enterprise plans...", tags: ["pricing", "plans"], status: "Published", updatedAt: "2026-06-18" },
-  { id: "a3", title: "Connecting WhatsApp Business", category: "Integrations", content: "Step-by-step guide to connect your WhatsApp Business account...", tags: ["whatsapp", "integration"], status: "Draft", updatedAt: "2026-06-15" },
-  { id: "a4", title: "Refund policy", category: "Policies", content: "Our refund policy covers...", tags: ["refund", "policy"], status: "Published", updatedAt: "2026-05-30" },
+  { id: "a1", title: "Démarrer avec l'Agent IA N7", category: "Intégration", content: "Bienvenue dans l'Agent IA N7. Ce guide présente les premières étapes...", tags: ["intro", "configuration"], status: "Published", updatedAt: "2026-06-22" },
+  { id: "a2", title: "Aperçu des tarifs et formules", category: "Tarifs", content: "Nous proposons les formules Starter, Growth et Enterprise...", tags: ["tarifs", "formules"], status: "Published", updatedAt: "2026-06-18" },
+  { id: "a3", title: "Connecter WhatsApp Business", category: "Intégrations", content: "Guide étape par étape pour connecter votre compte WhatsApp Business...", tags: ["whatsapp", "intégration"], status: "Draft", updatedAt: "2026-06-15" },
+  { id: "a4", title: "Politique de remboursement", category: "Politiques", content: "Notre politique de remboursement couvre...", tags: ["remboursement", "politique"], status: "Published", updatedAt: "2026-05-30" },
 ];
+
 
 export interface Faq {
   id: string;
@@ -107,11 +119,12 @@ export interface Faq {
 }
 
 export const faqs: Faq[] = [
-  { id: "f1", question: "How does the AI Customer Service Agent work?", answer: "It uses your published Knowledge Base to answer customer questions across all channels in real time.", category: "Product", status: "Published" },
-  { id: "f2", question: "Which languages are supported?", answer: "English, French, Arabic and Spanish are supported natively.", category: "Product", status: "Published" },
-  { id: "f3", question: "How long does onboarding take?", answer: "Typically between 3 and 7 business days.", category: "Onboarding", status: "Published" },
-  { id: "f4", question: "Do you offer a trial?", answer: "Yes, a 14-day free trial is available on the Growth plan.", category: "Pricing", status: "Draft" },
+  { id: "f1", question: "Comment fonctionne l'Agent IA du service client ?", answer: "Il utilise votre Base de connaissances publiée pour répondre aux questions des clients sur tous les canaux, en temps réel.", category: "Produit", status: "Published" },
+  { id: "f2", question: "Quelles langues sont prises en charge ?", answer: "Le français, l'anglais, l'arabe et l'espagnol sont pris en charge nativement.", category: "Produit", status: "Published" },
+  { id: "f3", question: "Combien de temps prend l'intégration ?", answer: "En général entre 3 et 7 jours ouvrés.", category: "Intégration", status: "Published" },
+  { id: "f4", question: "Proposez-vous un essai gratuit ?", answer: "Oui, un essai gratuit de 14 jours est disponible sur la formule Growth.", category: "Tarifs", status: "Draft" },
 ];
+
 
 export interface Service {
   id: string;
@@ -122,11 +135,12 @@ export interface Service {
 }
 
 export const services: Service[] = [
-  { id: "s1", name: "AI Customer Service Agent", description: "24/7 multilingual AI assistant trained on your knowledge base.", price: "From €499/mo", status: "Published" },
-  { id: "s2", name: "Lead Qualification", description: "Automated prospect scoring and qualification flows.", price: "From €299/mo", status: "Published" },
-  { id: "s3", name: "Knowledge Base Setup", description: "We help you structure and import your existing knowledge.", price: "One-time €1,500", status: "Published" },
-  { id: "s4", name: "Custom Integrations", description: "CRM, ERP and bespoke API integrations.", status: "Draft" },
+  { id: "s1", name: "Agent IA du service client", description: "Assistant IA multilingue 24h/24 et 7j/7 entraîné sur votre base de connaissances.", price: "À partir de 499 €/mois", status: "Published" },
+  { id: "s2", name: "Qualification de prospects", description: "Scoring et qualification automatisés des prospects.", price: "À partir de 299 €/mois", status: "Published" },
+  { id: "s3", name: "Mise en place de la base de connaissances", description: "Nous vous aidons à structurer et importer vos contenus existants.", price: "1 500 € unique", status: "Published" },
+  { id: "s4", name: "Intégrations sur mesure", description: "Intégrations CRM, ERP et API spécifiques.", status: "Draft" },
 ];
+
 
 export interface DocItem {
   id: string;
@@ -141,10 +155,10 @@ export interface DocItem {
 }
 
 export const documents: DocItem[] = [
-  { id: "d1", title: "Q4 Pricing Guide", category: "Pricing", description: "Detailed pricing for Q4 with all packages.", format: "PDF", size: "1.2 MB", status: "Published", uploadedAt: "2026-06-20", updatedAt: "2026-06-21" },
-  { id: "d2", title: "Company Brochure 2026", category: "Marketing", description: "Brand brochure used for prospect outreach.", format: "PDF", size: "3.4 MB", status: "Published", uploadedAt: "2026-06-10", updatedAt: "2026-06-10" },
-  { id: "d3", title: "Onboarding Checklist", category: "Onboarding", description: "Customer onboarding internal checklist.", format: "DOCX", size: "180 KB", status: "Draft", uploadedAt: "2026-06-02", updatedAt: "2026-06-09" },
-  { id: "d4", title: "Service Catalog", category: "Sales", description: "Full catalog of services with SKUs.", format: "XLSX", size: "420 KB", status: "Published", uploadedAt: "2026-05-28", updatedAt: "2026-06-05" },
+  { id: "d1", title: "Guide des tarifs T4", category: "Tarifs", description: "Tarification détaillée T4 avec toutes les offres.", format: "PDF", size: "1.2 Mo", status: "Published", uploadedAt: "2026-06-20", updatedAt: "2026-06-21" },
+  { id: "d2", title: "Brochure entreprise 2026", category: "Marketing", description: "Brochure utilisée pour la prospection.", format: "PDF", size: "3.4 Mo", status: "Published", uploadedAt: "2026-06-10", updatedAt: "2026-06-10" },
+  { id: "d3", title: "Checklist d'intégration", category: "Intégration", description: "Checklist interne d'intégration client.", format: "DOCX", size: "180 Ko", status: "Draft", uploadedAt: "2026-06-02", updatedAt: "2026-06-09" },
+  { id: "d4", title: "Catalogue de services", category: "Ventes", description: "Catalogue complet des services avec références.", format: "XLSX", size: "420 Ko", status: "Published", uploadedAt: "2026-05-28", updatedAt: "2026-06-05" },
 ];
 
 export interface BusinessHour {
@@ -155,14 +169,15 @@ export interface BusinessHour {
 }
 
 export const businessHours: BusinessHour[] = [
-  { day: "Monday", open: "09:00", close: "18:00", closed: false },
-  { day: "Tuesday", open: "09:00", close: "18:00", closed: false },
-  { day: "Wednesday", open: "09:00", close: "18:00", closed: false },
-  { day: "Thursday", open: "09:00", close: "18:00", closed: false },
-  { day: "Friday", open: "09:00", close: "17:00", closed: false },
-  { day: "Saturday", open: "10:00", close: "14:00", closed: false },
-  { day: "Sunday", open: "00:00", close: "00:00", closed: true },
+  { day: "Lundi", open: "09:00", close: "18:00", closed: false },
+  { day: "Mardi", open: "09:00", close: "18:00", closed: false },
+  { day: "Mercredi", open: "09:00", close: "18:00", closed: false },
+  { day: "Jeudi", open: "09:00", close: "18:00", closed: false },
+  { day: "Vendredi", open: "09:00", close: "17:00", closed: false },
+  { day: "Samedi", open: "10:00", close: "14:00", closed: false },
+  { day: "Dimanche", open: "00:00", close: "00:00", closed: true },
 ];
+
 
 export interface Location {
   id: string;
@@ -177,9 +192,10 @@ export interface Location {
 }
 
 export const locations: Location[] = [
-  { id: "l1", name: "N7 Headquarters", address: "12 Boulevard Mohamed V", city: "Casablanca", country: "Morocco", mapsUrl: "https://maps.google.com", phone: "+212 522 000 000", email: "hq@n7group.com", notes: "Main reception on ground floor." },
-  { id: "l2", name: "N7 Paris Office", address: "45 Rue La Boétie", city: "Paris", country: "France", mapsUrl: "https://maps.google.com", phone: "+33 1 00 00 00 00", email: "paris@n7group.com", notes: "By appointment only." },
+  { id: "l1", name: "Siège N7", address: "12 Boulevard Mohamed V", city: "Casablanca", country: "Maroc", mapsUrl: "https://maps.google.com", phone: "+212 522 000 000", email: "hq@n7group.com", notes: "Réception principale au rez-de-chaussée." },
+  { id: "l2", name: "Bureau N7 Paris", address: "45 Rue La Boétie", city: "Paris", country: "France", mapsUrl: "https://maps.google.com", phone: "+33 1 00 00 00 00", email: "paris@n7group.com", notes: "Sur rendez-vous uniquement." },
 ];
+
 
 export const contactInfo = {
   mainPhone: "+212 522 000 000",
