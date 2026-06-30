@@ -43,8 +43,8 @@ export function AppShell({ children }: { children: ReactNode }) {
       {/* Sidebar */}
       <aside className="hidden md:flex w-64 shrink-0 flex-col border-r border-border bg-sidebar">
         <div className="flex items-center px-4 h-16 border-b border-border">
-          <div className="flex items-center justify-center w-full h-11 rounded-lg bg-foreground px-3">
-            <img src={n7MobileLogo} alt="N7 Communication Group" className="h-7 w-auto" />
+          <div className="flex items-center justify-center w-full h-11 px-3">
+            <img src={n7MobileLogo} alt="N7 Communication Group" className="h-9 w-auto" />
           </div>
         </div>
 
@@ -100,8 +100,8 @@ export function AppShell({ children }: { children: ReactNode }) {
         {/* Topbar */}
         <header className="h-16 border-b border-border bg-background/80 backdrop-blur sticky top-0 z-30">
           <div className="h-full px-4 md:px-6 flex items-center gap-3">
-            <div className="md:hidden flex items-center justify-center h-9 px-2 rounded-lg bg-foreground">
-              <img src={n7MobileLogo} alt="N7" className="h-5 w-auto" />
+            <div className="md:hidden flex items-center justify-center h-9 px-2">
+              <img src={n7MobileLogo} alt="N7" className="h-7 w-auto" />
             </div>
 
             <div className="relative flex-1 max-w-md">
