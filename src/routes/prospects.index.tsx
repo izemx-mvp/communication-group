@@ -72,8 +72,8 @@ function ProspectsList() {
   return (
     <div>
       <PageHeader
-        title="Prospects"
-        description={`${filtered.length} sur ${data.length} contacts`}
+        title="Qualification AI"
+        description={`${filtered.length} sur ${data.length} prospects qualifiés par l'IA`}
         actions={
           <>
             <Button variant="outline" size="sm" onClick={exportCsv}>
