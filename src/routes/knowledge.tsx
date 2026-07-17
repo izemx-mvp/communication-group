@@ -8,7 +8,6 @@ import {
   MapPin,
   Phone,
   Sparkles,
-  UserCog,
 } from "lucide-react";
 
 import { PageHeader } from "@/components/app-shell";
@@ -33,7 +32,6 @@ const tabs = [
   { to: "/knowledge/business-hours", label: "Horaires d'ouverture", icon: Clock },
   { to: "/knowledge/locations", label: "Emplacements", icon: MapPin },
   { to: "/knowledge/contact", label: "Contact", icon: Phone },
-  { to: "/knowledge/users", label: "Gestion des utilisateurs", icon: UserCog },
 ];
 
 function KnowledgeLayout() {

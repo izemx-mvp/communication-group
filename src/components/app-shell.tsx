@@ -13,6 +13,7 @@ import {
   LogOut,
   Sparkles,
   Plug,
+  UserCog,
 } from "lucide-react";
 import { useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
@@ -38,6 +39,7 @@ const nav = [
   { to: "/calendar", label: "Calendrier", icon: CalendarDays },
   { to: "/knowledge", label: "Service Client AI", icon: BookOpen },
   { to: "/integrations", label: "Intégrations", icon: Plug },
+  { to: "/users", label: "Gestion des utilisateurs", icon: UserCog },
 ];
 
 

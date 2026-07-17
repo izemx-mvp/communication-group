@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Check, Plug, Settings2 } from "lucide-react";
+import { Check, Plug, Settings2, Unplug } from "lucide-react";
 import { toast } from "sonner";
 
 import { Card, CardContent } from "@/components/ui/card";
@@ -82,10 +82,10 @@ function IntegrationsPage() {
                         <Button size="sm" variant="outline" onClick={() => setEditing({ def, mode: "modify" })}>
                           <Settings2 className="h-3.5 w-3.5 mr-1.5" />Modifier
                         </Button>
-                        <Button size="sm" variant="ghost" className="text-destructive" onClick={() => {
+                        <Button size="sm" variant="outline" className="text-destructive border-destructive/40 hover:bg-destructive/10 hover:text-destructive" onClick={() => {
                           integrationsStore.disconnect(def.id);
                           toast.success(`${def.name} déconnecté`);
-                        }}>Déconnecter</Button>
+                        }}><Unplug className="h-3.5 w-3.5 mr-1.5" />Déconnecter</Button>
                       </div>
                     </div>
                   </>

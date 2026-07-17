@@ -19,9 +19,10 @@ import {
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/app-shell";
 import { usersStore, useUsers, type AppUser, type UserRole, type UserStatus } from "@/lib/users-store";
 
-export const Route = createFileRoute("/knowledge/users")({
+export const Route = createFileRoute("/users")({
   head: () => ({
     meta: [{ title: "Gestion des utilisateurs — N7 Back Office" }],
   }),
@@ -80,8 +81,13 @@ function UsersPage() {
   }
 
   return (
-    <Card className="shadow-soft">
-      <CardContent className="p-4 space-y-4">
+    <div>
+      <PageHeader
+        title="Gestion des utilisateurs"
+        description="Créez, modifiez et gérez les accès de votre équipe au back office."
+      />
+      <Card className="shadow-soft">
+        <CardContent className="p-4 space-y-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[220px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -212,6 +218,7 @@ function UsersPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </Card>
+      </Card>
+    </div>
   );
 }
