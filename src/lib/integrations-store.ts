@@ -104,39 +104,6 @@ export const integrationDefs: IntegrationDef[] = [
       { key: "account", label: "Adresse Gmail", type: "email" },
     ],
   },
-  {
-    id: "hubspot",
-    name: "HubSpot CRM",
-    category: "CRM",
-    description: "Synchronisez prospects et contacts avec HubSpot.",
-    logo: "https://cdn.simpleicons.org/hubspot",
-    fields: [
-      { key: "portalId", label: "Portal ID", type: "text" },
-      { key: "privateAppToken", label: "Private App Token", type: "password", placeholder: "pat-na1-…" },
-    ],
-  },
-  {
-    id: "slack",
-    name: "Slack",
-    category: "Notifications",
-    description: "Recevez les alertes prospects dans un canal Slack.",
-    logo: "https://cdn.simpleicons.org/slack",
-    fields: [
-      { key: "botToken", label: "Bot User OAuth Token", type: "password", placeholder: "xoxb-…" },
-      { key: "channelId", label: "Channel ID", type: "text", placeholder: "C0123456" },
-    ],
-  },
-  {
-    id: "stripe",
-    name: "Stripe",
-    category: "Paiements",
-    description: "Créez des liens de paiement pour vos prospects.",
-    logo: "https://cdn.simpleicons.org/stripe",
-    fields: [
-      { key: "secretKey", label: "Secret Key", type: "password", placeholder: "sk_live_…" },
-      { key: "webhookSecret", label: "Webhook Signing Secret", type: "password", placeholder: "whsec_…" },
-    ],
-  },
 ];
 
 let state: Record<string, IntegrationState> = {
