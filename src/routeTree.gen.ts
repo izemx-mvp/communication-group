@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProspectsRouteImport } from './routes/prospects'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as KnowledgeRouteImport } from './routes/knowledge'
+import { Route as IntegrationsRouteImport } from './routes/integrations'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProspectsIndexRouteImport } from './routes/prospects.index'
@@ -38,6 +39,11 @@ const LoginRoute = LoginRouteImport.update({
 const KnowledgeRoute = KnowledgeRouteImport.update({
   id: '/knowledge',
   path: '/knowledge',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const IntegrationsRoute = IntegrationsRouteImport.update({
+  id: '/integrations',
+  path: '/integrations',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CalendarRoute = CalendarRouteImport.update({
@@ -104,6 +110,7 @@ const KnowledgeBusinessHoursRoute = KnowledgeBusinessHoursRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
+  '/integrations': typeof IntegrationsRoute
   '/knowledge': typeof KnowledgeRouteWithChildren
   '/login': typeof LoginRoute
   '/prospects': typeof ProspectsRouteWithChildren
@@ -121,6 +128,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
+  '/integrations': typeof IntegrationsRoute
   '/login': typeof LoginRoute
   '/knowledge/business-hours': typeof KnowledgeBusinessHoursRoute
   '/knowledge/contact': typeof KnowledgeContactRoute
@@ -137,6 +145,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
+  '/integrations': typeof IntegrationsRoute
   '/knowledge': typeof KnowledgeRouteWithChildren
   '/login': typeof LoginRoute
   '/prospects': typeof ProspectsRouteWithChildren
@@ -156,6 +165,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/calendar'
+    | '/integrations'
     | '/knowledge'
     | '/login'
     | '/prospects'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/calendar'
+    | '/integrations'
     | '/login'
     | '/knowledge/business-hours'
     | '/knowledge/contact'
@@ -188,6 +199,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/calendar'
+    | '/integrations'
     | '/knowledge'
     | '/login'
     | '/prospects'
@@ -206,6 +218,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalendarRoute: typeof CalendarRoute
+  IntegrationsRoute: typeof IntegrationsRoute
   KnowledgeRoute: typeof KnowledgeRouteWithChildren
   LoginRoute: typeof LoginRoute
   ProspectsRoute: typeof ProspectsRouteWithChildren
@@ -232,6 +245,13 @@ declare module '@tanstack/react-router' {
       path: '/knowledge'
       fullPath: '/knowledge'
       preLoaderRoute: typeof KnowledgeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/integrations': {
+      id: '/integrations'
+      path: '/integrations'
+      fullPath: '/integrations'
+      preLoaderRoute: typeof IntegrationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/calendar': {
@@ -364,6 +384,7 @@ const ProspectsRouteWithChildren = ProspectsRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalendarRoute: CalendarRoute,
+  IntegrationsRoute: IntegrationsRoute,
   KnowledgeRoute: KnowledgeRouteWithChildren,
   LoginRoute: LoginRoute,
   ProspectsRoute: ProspectsRouteWithChildren,
