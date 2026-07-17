@@ -67,13 +67,7 @@ function LoginPage() {
           transition={{ duration: 0.4 }}
           className="relative flex items-center gap-3"
         >
-          <div className="h-10 w-10 rounded-xl bg-white/10 backdrop-blur grid place-items-center ring-1 ring-white/15">
-            <img src={n7Logo} alt="N7" className="h-6 w-auto" />
-          </div>
-          <div>
-            <div className="text-sm font-semibold tracking-tight">N7 Back Office</div>
-            <div className="text-[11px] text-white/60">AI Customer Service Platform</div>
-          </div>
+          <BrandMark className="text-white" />
         </motion.div>
 
         <motion.div
