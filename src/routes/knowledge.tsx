@@ -49,16 +49,6 @@ function KnowledgeLayout() {
         description="La base de connaissances qui alimente votre agent IA du service client."
       />
 
-function KnowledgeLayout() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
-
-  return (
-    <div>
-      <PageHeader
-        title="Base de connaissances"
-        description="Tout le contenu publié ici peut être utilisé par l'Agent IA du service client."
-      />
-
       <Card className="mb-5 shadow-soft bg-gradient-to-br from-accent/60 to-card border-primary/10">
         <CardContent className="p-4 flex items-center gap-3">
           <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary text-primary-foreground">
