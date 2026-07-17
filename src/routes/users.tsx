@@ -21,7 +21,10 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/app-shell";
 import { Checkbox } from "@/components/ui/checkbox";
-import { usersStore, useUsers, MODULES, type AppUser, type UserRole, type UserStatus, type ModuleKey } from "@/lib/users-store";
+import {
+  usersStore, useUsers, MODULES, CRUD_ACTIONS, emptyPermissions,
+  type AppUser, type UserRole, type UserStatus, type ModuleKey, type CrudAction,
+} from "@/lib/users-store";
 
 export const Route = createFileRoute("/users")({
   head: () => ({
@@ -33,9 +36,10 @@ export const Route = createFileRoute("/users")({
 const roles: UserRole[] = ["Admin", "Manager", "Agent", "Lecteur"];
 const statuses: UserStatus[] = ["Actif", "Invité", "Suspendu"];
 
-const emptyDraft: Omit<AppUser, "id" | "createdAt"> = {
-  name: "", email: "", role: "Agent", status: "Invité", modules: ["dashboard"],
-};
+const makeEmptyDraft = (): Omit<AppUser, "id" | "createdAt"> => ({
+  name: "", email: "", role: "Agent", status: "Invité",
+  permissions: { ...emptyPermissions(), dashboard: { view: true, create: false, update: false, delete: false } },
+});
 
 function UsersPage() {
   const users = useUsers();
