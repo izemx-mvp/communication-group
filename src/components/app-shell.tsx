@@ -12,7 +12,7 @@ import {
   Settings,
   LogOut,
   Sparkles,
-  Cpu,
+  Plug,
 } from "lucide-react";
 import { useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
@@ -37,7 +37,7 @@ const nav = [
   { to: "/prospects", label: "Qualification AI", icon: Users },
   { to: "/calendar", label: "Calendrier", icon: CalendarDays },
   { to: "/knowledge", label: "Service Client AI", icon: BookOpen },
-  { to: "/models", label: "Modèles IA", icon: Cpu },
+  { to: "/integrations", label: "Intégrations", icon: Plug },
 ];
 
 
