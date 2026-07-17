@@ -218,6 +218,7 @@ function UsersPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </Card>
+      </Card>
+    </div>
   );
 }
