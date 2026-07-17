@@ -159,21 +159,28 @@ function UsersPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden xl:table-cell">
-                    <div className="flex flex-wrap gap-1 max-w-[280px]">
-                      {(u.modules ?? []).slice(0, 3).map((k) => {
-                        const m = MODULES.find((x) => x.key === k);
-                        return (
-                          <Badge key={k} variant="outline" className="font-normal text-[10px]">
-                            {m?.label ?? k}
-                          </Badge>
-                        );
-                      })}
-                      {(u.modules?.length ?? 0) > 3 && (
-                        <Badge variant="outline" className="font-normal text-[10px]">
-                          +{(u.modules?.length ?? 0) - 3}
-                        </Badge>
-                      )}
-                    </div>
+                    {(() => {
+                      const active = MODULES.filter((m) => u.permissions?.[m.key]?.view);
+                      return (
+                        <div className="flex flex-wrap gap-1 max-w-[280px]">
+                          {active.slice(0, 3).map((m) => {
+                            const p = u.permissions[m.key];
+                            const write = p.create || p.update || p.delete;
+                            return (
+                              <Badge key={m.key} variant="outline" className={cn(
+                                "font-normal text-[10px]",
+                                write && "bg-primary/10 text-primary border-primary/20",
+                              )}>
+                                {m.label}{write ? " • CRUD" : ""}
+                              </Badge>
+                            );
+                          })}
+                          {active.length > 3 && (
+                            <Badge variant="outline" className="font-normal text-[10px]">+{active.length - 3}</Badge>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </TableCell>
                   <TableCell className="hidden lg:table-cell text-muted-foreground text-sm">{u.createdAt}</TableCell>
                   <TableCell className="text-right">
