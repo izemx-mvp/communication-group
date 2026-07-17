@@ -8,7 +8,19 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 
-const n7Logo = "https://n7.ma/wp-content/uploads/2025/06/n7-mobile-logo.png";
+function BrandMark({ className = "" }: { className?: string }) {
+  return (
+    <div className={`inline-flex items-center gap-2.5 ${className}`}>
+      <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary to-[oklch(0.55_0.18_25)] grid place-items-center shadow-lg shadow-primary/30 ring-1 ring-white/20">
+        <span className="text-white font-bold text-[15px] tracking-tight leading-none">N7</span>
+      </div>
+      <div className="leading-tight">
+        <div className="text-sm font-semibold tracking-tight">N7 Back Office</div>
+        <div className="text-[11px] opacity-60">AI Customer Service</div>
+      </div>
+    </div>
+  );
+}
 
 export const Route = createFileRoute("/login")({
   head: () => ({
