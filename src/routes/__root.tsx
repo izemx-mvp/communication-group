@@ -81,6 +81,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Back office for N7 Communication Group's AI Customer Service platform." },
     ],
     links: [
+      { rel: "icon", type: "image/png", href: "https://n7.ma/wp-content/uploads/2025/06/n7-mobile-logo.png" },
+      { rel: "apple-touch-icon", href: "https://n7.ma/wp-content/uploads/2025/06/n7-mobile-logo.png" },
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },

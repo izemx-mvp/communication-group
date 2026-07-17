@@ -1,5 +1,5 @@
 const n7MobileLogo = "https://n7.ma/wp-content/uploads/2025/06/n7-mobile-logo.png";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 
 import {
@@ -45,6 +45,11 @@ const nav = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+  function handleSignOut() {
+    try { localStorage.removeItem("n7_session"); } catch {}
+    navigate({ to: "/login" });
+  }
 
   return (
     <div className="relative flex min-h-screen w-full bg-background text-foreground">
@@ -155,7 +160,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <DropdownMenuItem>
                     <Settings className="h-4 w-4 mr-2" /> Paramètres
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onSelect={handleSignOut}>
                     <LogOut className="h-4 w-4 mr-2" /> Se déconnecter
                   </DropdownMenuItem>
                 </DropdownMenuContent>

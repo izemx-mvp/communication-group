@@ -20,7 +20,8 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/app-shell";
-import { usersStore, useUsers, type AppUser, type UserRole, type UserStatus } from "@/lib/users-store";
+import { Checkbox } from "@/components/ui/checkbox";
+import { usersStore, useUsers, MODULES, type AppUser, type UserRole, type UserStatus, type ModuleKey } from "@/lib/users-store";
 
 export const Route = createFileRoute("/users")({
   head: () => ({
@@ -33,7 +34,7 @@ const roles: UserRole[] = ["Admin", "Manager", "Agent", "Lecteur"];
 const statuses: UserStatus[] = ["Actif", "Invité", "Suspendu"];
 
 const emptyDraft: Omit<AppUser, "id" | "createdAt"> = {
-  name: "", email: "", role: "Agent", status: "Invité",
+  name: "", email: "", role: "Agent", status: "Invité", modules: ["dashboard"],
 };
 
 function UsersPage() {
@@ -58,7 +59,7 @@ function UsersPage() {
   }
   function openEdit(u: AppUser) {
     setEditing(u);
-    setDraft({ name: u.name, email: u.email, role: u.role, status: u.status });
+    setDraft({ name: u.name, email: u.email, role: u.role, status: u.status, modules: u.modules ?? [] });
     setOpen(true);
   }
   function save() {
@@ -113,6 +114,7 @@ function UsersPage() {
                 <TableHead className="hidden md:table-cell">Email</TableHead>
                 <TableHead>Rôle</TableHead>
                 <TableHead>Statut</TableHead>
+                <TableHead className="hidden xl:table-cell">Modules</TableHead>
                 <TableHead className="hidden lg:table-cell">Créé le</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
@@ -149,6 +151,23 @@ function UsersPage() {
                       {u.status}
                     </Badge>
                   </TableCell>
+                  <TableCell className="hidden xl:table-cell">
+                    <div className="flex flex-wrap gap-1 max-w-[280px]">
+                      {(u.modules ?? []).slice(0, 3).map((k) => {
+                        const m = MODULES.find((x) => x.key === k);
+                        return (
+                          <Badge key={k} variant="outline" className="font-normal text-[10px]">
+                            {m?.label ?? k}
+                          </Badge>
+                        );
+                      })}
+                      {(u.modules?.length ?? 0) > 3 && (
+                        <Badge variant="outline" className="font-normal text-[10px]">
+                          +{(u.modules?.length ?? 0) - 3}
+                        </Badge>
+                      )}
+                    </div>
+                  </TableCell>
                   <TableCell className="hidden lg:table-cell text-muted-foreground text-sm">{u.createdAt}</TableCell>
                   <TableCell className="text-right">
                     <div className="inline-flex gap-1">
@@ -167,7 +186,7 @@ function UsersPage() {
               ))}
               {filtered.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-10 text-muted-foreground text-sm">
+                  <TableCell colSpan={7} className="text-center py-10 text-muted-foreground text-sm">
                     Aucun utilisateur trouvé
                   </TableCell>
                 </TableRow>
@@ -210,6 +229,29 @@ function UsersPage() {
                   </SelectContent>
                 </Select>
               </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Accès aux modules</Label>
+              <div className="rounded-lg border border-border p-3 grid grid-cols-2 gap-2">
+                {MODULES.map((m) => {
+                  const checked = draft.modules.includes(m.key);
+                  return (
+                    <label key={m.key} className="flex items-center gap-2 text-sm cursor-pointer rounded-md px-2 py-1.5 hover:bg-muted">
+                      <Checkbox
+                        checked={checked}
+                        onCheckedChange={(v) => {
+                          const next = v
+                            ? [...draft.modules, m.key]
+                            : draft.modules.filter((k) => k !== m.key);
+                          setDraft({ ...draft, modules: next as ModuleKey[] });
+                        }}
+                      />
+                      <span>{m.label}</span>
+                    </label>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-muted-foreground">Contrôle les sections visibles pour cet utilisateur dans la barre latérale.</p>
             </div>
           </div>
           <DialogFooter>
