@@ -36,7 +36,18 @@ const tabs = [
   { to: "/knowledge/locations", label: "Emplacements", icon: MapPin },
   { to: "/knowledge/contact", label: "Contact", icon: Phone },
   { to: "/knowledge/integrations", label: "Intégrations", icon: Plug },
+  { to: "/knowledge/users", label: "Utilisateurs", icon: UserCog },
 ];
+
+function KnowledgeLayout() {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  return (
+    <div>
+      <PageHeader
+        title="Service Client AI"
+        description="La base de connaissances qui alimente votre agent IA du service client."
+      />
 
 function KnowledgeLayout() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
