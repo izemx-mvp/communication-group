@@ -45,6 +45,11 @@ const nav = [
 
 export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
+  function handleSignOut() {
+    try { localStorage.removeItem("n7_session"); } catch {}
+    navigate({ to: "/login" });
+  }
 
   return (
     <div className="relative flex min-h-screen w-full bg-background text-foreground">
