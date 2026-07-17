@@ -117,7 +117,7 @@ function LoginPage() {
         >
           {/* mobile logo */}
           <div className="lg:hidden mb-6 flex justify-center">
-            <BrandMark className="text-foreground" />
+            <img src={n7Logo} alt="N7 Communication Group" className="h-10 w-auto" />
           </div>
 
           <div className="mb-7">
