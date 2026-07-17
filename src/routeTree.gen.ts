@@ -10,12 +10,15 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ProspectsRouteImport } from './routes/prospects'
+import { Route as ModelsRouteImport } from './routes/models'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as KnowledgeRouteImport } from './routes/knowledge'
 import { Route as CalendarRouteImport } from './routes/calendar'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProspectsIndexRouteImport } from './routes/prospects.index'
 import { Route as KnowledgeIndexRouteImport } from './routes/knowledge.index'
 import { Route as ProspectsIdRouteImport } from './routes/prospects.$id'
+import { Route as KnowledgeUsersRouteImport } from './routes/knowledge.users'
 import { Route as KnowledgeServicesRouteImport } from './routes/knowledge.services'
 import { Route as KnowledgeLocationsRouteImport } from './routes/knowledge.locations'
 import { Route as KnowledgeIntegrationsRouteImport } from './routes/knowledge.integrations'
@@ -27,6 +30,16 @@ import { Route as KnowledgeBusinessHoursRouteImport } from './routes/knowledge.b
 const ProspectsRoute = ProspectsRouteImport.update({
   id: '/prospects',
   path: '/prospects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ModelsRoute = ModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KnowledgeRoute = KnowledgeRouteImport.update({
@@ -58,6 +71,11 @@ const ProspectsIdRoute = ProspectsIdRouteImport.update({
   id: '/$id',
   path: '/$id',
   getParentRoute: () => ProspectsRoute,
+} as any)
+const KnowledgeUsersRoute = KnowledgeUsersRouteImport.update({
+  id: '/users',
+  path: '/users',
+  getParentRoute: () => KnowledgeRoute,
 } as any)
 const KnowledgeServicesRoute = KnowledgeServicesRouteImport.update({
   id: '/services',
@@ -99,6 +117,8 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/knowledge': typeof KnowledgeRouteWithChildren
+  '/login': typeof LoginRoute
+  '/models': typeof ModelsRoute
   '/prospects': typeof ProspectsRouteWithChildren
   '/knowledge/business-hours': typeof KnowledgeBusinessHoursRoute
   '/knowledge/contact': typeof KnowledgeContactRoute
@@ -107,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/knowledge/integrations': typeof KnowledgeIntegrationsRoute
   '/knowledge/locations': typeof KnowledgeLocationsRoute
   '/knowledge/services': typeof KnowledgeServicesRoute
+  '/knowledge/users': typeof KnowledgeUsersRoute
   '/prospects/$id': typeof ProspectsIdRoute
   '/knowledge/': typeof KnowledgeIndexRoute
   '/prospects/': typeof ProspectsIndexRoute
@@ -114,6 +135,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
+  '/login': typeof LoginRoute
+  '/models': typeof ModelsRoute
   '/knowledge/business-hours': typeof KnowledgeBusinessHoursRoute
   '/knowledge/contact': typeof KnowledgeContactRoute
   '/knowledge/documents': typeof KnowledgeDocumentsRoute
@@ -121,6 +144,7 @@ export interface FileRoutesByTo {
   '/knowledge/integrations': typeof KnowledgeIntegrationsRoute
   '/knowledge/locations': typeof KnowledgeLocationsRoute
   '/knowledge/services': typeof KnowledgeServicesRoute
+  '/knowledge/users': typeof KnowledgeUsersRoute
   '/prospects/$id': typeof ProspectsIdRoute
   '/knowledge': typeof KnowledgeIndexRoute
   '/prospects': typeof ProspectsIndexRoute
@@ -130,6 +154,8 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/calendar': typeof CalendarRoute
   '/knowledge': typeof KnowledgeRouteWithChildren
+  '/login': typeof LoginRoute
+  '/models': typeof ModelsRoute
   '/prospects': typeof ProspectsRouteWithChildren
   '/knowledge/business-hours': typeof KnowledgeBusinessHoursRoute
   '/knowledge/contact': typeof KnowledgeContactRoute
@@ -138,6 +164,7 @@ export interface FileRoutesById {
   '/knowledge/integrations': typeof KnowledgeIntegrationsRoute
   '/knowledge/locations': typeof KnowledgeLocationsRoute
   '/knowledge/services': typeof KnowledgeServicesRoute
+  '/knowledge/users': typeof KnowledgeUsersRoute
   '/prospects/$id': typeof ProspectsIdRoute
   '/knowledge/': typeof KnowledgeIndexRoute
   '/prospects/': typeof ProspectsIndexRoute
@@ -148,6 +175,8 @@ export interface FileRouteTypes {
     | '/'
     | '/calendar'
     | '/knowledge'
+    | '/login'
+    | '/models'
     | '/prospects'
     | '/knowledge/business-hours'
     | '/knowledge/contact'
@@ -156,6 +185,7 @@ export interface FileRouteTypes {
     | '/knowledge/integrations'
     | '/knowledge/locations'
     | '/knowledge/services'
+    | '/knowledge/users'
     | '/prospects/$id'
     | '/knowledge/'
     | '/prospects/'
@@ -163,6 +193,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/calendar'
+    | '/login'
+    | '/models'
     | '/knowledge/business-hours'
     | '/knowledge/contact'
     | '/knowledge/documents'
@@ -170,6 +202,7 @@ export interface FileRouteTypes {
     | '/knowledge/integrations'
     | '/knowledge/locations'
     | '/knowledge/services'
+    | '/knowledge/users'
     | '/prospects/$id'
     | '/knowledge'
     | '/prospects'
@@ -178,6 +211,8 @@ export interface FileRouteTypes {
     | '/'
     | '/calendar'
     | '/knowledge'
+    | '/login'
+    | '/models'
     | '/prospects'
     | '/knowledge/business-hours'
     | '/knowledge/contact'
@@ -186,6 +221,7 @@ export interface FileRouteTypes {
     | '/knowledge/integrations'
     | '/knowledge/locations'
     | '/knowledge/services'
+    | '/knowledge/users'
     | '/prospects/$id'
     | '/knowledge/'
     | '/prospects/'
@@ -195,6 +231,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CalendarRoute: typeof CalendarRoute
   KnowledgeRoute: typeof KnowledgeRouteWithChildren
+  LoginRoute: typeof LoginRoute
+  ModelsRoute: typeof ModelsRoute
   ProspectsRoute: typeof ProspectsRouteWithChildren
 }
 
@@ -205,6 +243,20 @@ declare module '@tanstack/react-router' {
       path: '/prospects'
       fullPath: '/prospects'
       preLoaderRoute: typeof ProspectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/models': {
+      id: '/models'
+      path: '/models'
+      fullPath: '/models'
+      preLoaderRoute: typeof ModelsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/knowledge': {
@@ -248,6 +300,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/prospects/$id'
       preLoaderRoute: typeof ProspectsIdRouteImport
       parentRoute: typeof ProspectsRoute
+    }
+    '/knowledge/users': {
+      id: '/knowledge/users'
+      path: '/users'
+      fullPath: '/knowledge/users'
+      preLoaderRoute: typeof KnowledgeUsersRouteImport
+      parentRoute: typeof KnowledgeRoute
     }
     '/knowledge/services': {
       id: '/knowledge/services'
@@ -309,6 +368,7 @@ interface KnowledgeRouteChildren {
   KnowledgeIntegrationsRoute: typeof KnowledgeIntegrationsRoute
   KnowledgeLocationsRoute: typeof KnowledgeLocationsRoute
   KnowledgeServicesRoute: typeof KnowledgeServicesRoute
+  KnowledgeUsersRoute: typeof KnowledgeUsersRoute
   KnowledgeIndexRoute: typeof KnowledgeIndexRoute
 }
 
@@ -320,6 +380,7 @@ const KnowledgeRouteChildren: KnowledgeRouteChildren = {
   KnowledgeIntegrationsRoute: KnowledgeIntegrationsRoute,
   KnowledgeLocationsRoute: KnowledgeLocationsRoute,
   KnowledgeServicesRoute: KnowledgeServicesRoute,
+  KnowledgeUsersRoute: KnowledgeUsersRoute,
   KnowledgeIndexRoute: KnowledgeIndexRoute,
 }
 
@@ -345,6 +406,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CalendarRoute: CalendarRoute,
   KnowledgeRoute: KnowledgeRouteWithChildren,
+  LoginRoute: LoginRoute,
+  ModelsRoute: ModelsRoute,
   ProspectsRoute: ProspectsRouteWithChildren,
 }
 export const routeTree = rootRouteImport

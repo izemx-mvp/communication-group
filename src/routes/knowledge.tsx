@@ -9,6 +9,8 @@ import {
   Phone,
   Plug,
   Sparkles,
+  UserCog,
+
 } from "lucide-react";
 
 import { PageHeader } from "@/components/app-shell";
@@ -34,6 +36,7 @@ const tabs = [
   { to: "/knowledge/locations", label: "Emplacements", icon: MapPin },
   { to: "/knowledge/contact", label: "Contact", icon: Phone },
   { to: "/knowledge/integrations", label: "Intégrations", icon: Plug },
+  { to: "/knowledge/users", label: "Utilisateurs", icon: UserCog },
 ];
 
 function KnowledgeLayout() {
@@ -42,8 +45,8 @@ function KnowledgeLayout() {
   return (
     <div>
       <PageHeader
-        title="Base de connaissances"
-        description="Tout le contenu publié ici peut être utilisé par l'Agent IA du service client."
+        title="Service Client AI"
+        description="La base de connaissances qui alimente votre agent IA du service client."
       />
 
       <Card className="mb-5 shadow-soft bg-gradient-to-br from-accent/60 to-card border-primary/10">
