@@ -21,7 +21,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { usersStore, useUsers, type AppUser, type UserRole, type UserStatus } from "@/lib/users-store";
 
-export const Route = createFileRoute("/knowledge/users")({
+export const Route = createFileRoute("/users")({
   head: () => ({
     meta: [{ title: "Gestion des utilisateurs — N7 Back Office" }],
   }),
