@@ -45,9 +45,16 @@ export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   return (
-    <div className="flex min-h-screen w-full bg-background text-foreground">
+    <div className="relative flex min-h-screen w-full bg-background text-foreground">
+      {/* ambient background */}
+      <div className="pointer-events-none fixed inset-0 -z-0 overflow-hidden">
+        <div className="absolute -top-40 left-1/3 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl" />
+        <div className="absolute bottom-[-160px] right-[-100px] h-[420px] w-[420px] rounded-full bg-info/10 blur-3xl" />
+        <div className="absolute inset-0 [background-image:linear-gradient(to_right,color-mix(in_oklab,var(--color-border)_45%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,var(--color-border)_45%,transparent)_1px,transparent_1px)] [background-size:52px_52px] [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_80%)] opacity-30" />
+      </div>
       {/* Sidebar */}
-      <aside className="hidden md:flex w-64 shrink-0 flex-col border-r border-border bg-sidebar">
+      <aside className="relative z-10 hidden md:flex w-64 shrink-0 flex-col border-r border-border bg-sidebar/80 backdrop-blur">
+
         <div className="flex items-center px-4 h-16 border-b border-border">
           <div className="flex items-center justify-center w-full h-11 px-3">
             <img src={n7MobileLogo} alt="N7 Communication Group" className="h-9 w-auto" />
