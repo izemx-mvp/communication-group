@@ -16,8 +16,9 @@ import {
   integrationDefs, integrationsStore, useIntegrations,
   type IntegrationDef,
 } from "@/lib/integrations-store";
+import { PageHeader } from "@/components/app-shell";
 
-export const Route = createFileRoute("/knowledge/integrations")({
+export const Route = createFileRoute("/integrations")({
   head: () => ({ meta: [{ title: "Intégrations — N7 Back Office" }] }),
   component: IntegrationsPage,
 });
@@ -27,10 +28,13 @@ function IntegrationsPage() {
   const [editing, setEditing] = useState<{ def: IntegrationDef; mode: "connect" | "modify" } | null>(null);
 
   return (
-    <div className="space-y-4">
-      <div className="text-sm text-muted-foreground">
-        Connectez vos outils pour alimenter l'Agent IA et automatiser vos flux (messages, réunions, CRM…).
-      </div>
+    <div>
+      <PageHeader
+        title="Intégrations"
+        description="Connectez vos outils pour alimenter l'Agent IA et automatiser vos flux (messages, réunions, CRM, paiements…)."
+      />
+
+
 
       <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-4">
         {integrationDefs.map((def) => {

@@ -34,7 +34,7 @@ export const integrationDefs: IntegrationDef[] = [
     name: "Google Meet",
     category: "Réunions",
     description: "Planifiez automatiquement des visioconférences avec vos prospects.",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Google_Meet_icon_%282020%29.svg/512px-Google_Meet_icon_%282020%29.svg.png",
+    logo: "https://cdn.simpleicons.org/googlemeet",
     docsUrl: "https://developers.google.com/meet",
     fields: [
       { key: "clientId", label: "OAuth Client ID", type: "text", placeholder: "xxxxx.apps.googleusercontent.com" },
@@ -48,7 +48,7 @@ export const integrationDefs: IntegrationDef[] = [
     name: "Google Calendar",
     category: "Réunions",
     description: "Synchronisez les rendez-vous et disponibilités de votre équipe.",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Google_Calendar_icon_%282020%29.svg/512px-Google_Calendar_icon_%282020%29.svg.png",
+    logo: "https://cdn.simpleicons.org/googlecalendar",
     fields: [
       { key: "clientId", label: "OAuth Client ID", type: "text", placeholder: "xxxxx.apps.googleusercontent.com" },
       { key: "clientSecret", label: "OAuth Client Secret", type: "password" },
@@ -61,7 +61,7 @@ export const integrationDefs: IntegrationDef[] = [
     name: "WhatsApp Business",
     category: "Messagerie",
     description: "Connectez votre compte WhatsApp Business Cloud API.",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/WhatsApp.svg/512px-WhatsApp.svg.png",
+    logo: "https://cdn.simpleicons.org/whatsapp",
     fields: [
       { key: "phoneNumberId", label: "Phone Number ID", type: "text", placeholder: "123456789012345" },
       { key: "wabaId", label: "WhatsApp Business Account ID", type: "text" },
@@ -74,7 +74,7 @@ export const integrationDefs: IntegrationDef[] = [
     name: "Facebook Messenger",
     category: "Messagerie",
     description: "Répondez aux messages de vos pages Facebook.",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Facebook_f_logo_%282019%29.svg/512px-Facebook_f_logo_%282019%29.svg.png",
+    logo: "https://cdn.simpleicons.org/facebook",
     fields: [
       { key: "pageId", label: "Page ID", type: "text" },
       { key: "pageAccessToken", label: "Page Access Token", type: "password" },
@@ -86,7 +86,7 @@ export const integrationDefs: IntegrationDef[] = [
     name: "Instagram Direct",
     category: "Messagerie",
     description: "Recevez et répondez aux DM Instagram.",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Instagram_icon.png/512px-Instagram_icon.png",
+    logo: "https://cdn.simpleicons.org/instagram",
     fields: [
       { key: "igUserId", label: "Instagram User ID", type: "text" },
       { key: "accessToken", label: "Access Token", type: "password" },
@@ -97,7 +97,7 @@ export const integrationDefs: IntegrationDef[] = [
     name: "Gmail",
     category: "Email",
     description: "Envoyez et recevez des emails via votre boîte Gmail.",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Gmail_icon_%282020%29.svg/512px-Gmail_icon_%282020%29.svg.png",
+    logo: "https://cdn.simpleicons.org/gmail",
     fields: [
       { key: "clientId", label: "OAuth Client ID", type: "text" },
       { key: "clientSecret", label: "OAuth Client Secret", type: "password" },
@@ -109,7 +109,7 @@ export const integrationDefs: IntegrationDef[] = [
     name: "HubSpot CRM",
     category: "CRM",
     description: "Synchronisez prospects et contacts avec HubSpot.",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/HubSpot_Logo.svg/512px-HubSpot_Logo.svg.png",
+    logo: "https://cdn.simpleicons.org/hubspot",
     fields: [
       { key: "portalId", label: "Portal ID", type: "text" },
       { key: "privateAppToken", label: "Private App Token", type: "password", placeholder: "pat-na1-…" },
@@ -120,7 +120,7 @@ export const integrationDefs: IntegrationDef[] = [
     name: "Slack",
     category: "Notifications",
     description: "Recevez les alertes prospects dans un canal Slack.",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Slack_icon_2019.svg/512px-Slack_icon_2019.svg.png",
+    logo: "https://cdn.simpleicons.org/slack",
     fields: [
       { key: "botToken", label: "Bot User OAuth Token", type: "password", placeholder: "xoxb-…" },
       { key: "channelId", label: "Channel ID", type: "text", placeholder: "C0123456" },
@@ -131,7 +131,7 @@ export const integrationDefs: IntegrationDef[] = [
     name: "Stripe",
     category: "Paiements",
     description: "Créez des liens de paiement pour vos prospects.",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/ba/Stripe_Logo%2C_revised_2016.svg/512px-Stripe_Logo%2C_revised_2016.svg.png",
+    logo: "https://cdn.simpleicons.org/stripe",
     fields: [
       { key: "secretKey", label: "Secret Key", type: "password", placeholder: "sk_live_…" },
       { key: "webhookSecret", label: "Webhook Signing Secret", type: "password", placeholder: "whsec_…" },
