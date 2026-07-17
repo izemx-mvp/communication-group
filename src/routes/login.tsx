@@ -126,8 +126,8 @@ function LoginPage() {
           className="w-full max-w-sm"
         >
           {/* mobile logo */}
-          <div className="lg:hidden mb-6 flex flex-col items-center text-center">
-            <img src={n7Logo} alt="N7" className="h-10 w-auto" />
+          <div className="lg:hidden mb-6 flex justify-center">
+            <BrandMark className="text-foreground" />
           </div>
 
           <div className="mb-7">
