@@ -2,8 +2,10 @@ import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-r
 import { useState } from "react";
 import {
   ArrowLeft, Mail, Phone, MapPin, Building2, Edit, UserCheck, Trash2, Calendar,
+  Video, ExternalLink, Plus,
 } from "lucide-react";
 import { toast } from "sonner";
+import { meetingsStore, useMeetings, generateMeetLink, type Meeting } from "@/lib/meetings-store";
 
 import { PageHeader, StatusBadge } from "@/components/app-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -112,6 +114,8 @@ function ProspectDetail() {
               </div>
             </CardContent>
           </Card>
+
+          <ProspectMeetings prospectId={p.id} prospectName={`${p.prenom} ${p.nom}`} prospectEmail={p.email} />
 
           <Card className="shadow-soft">
             <CardHeader><CardTitle className="text-base">Notes internes</CardTitle></CardHeader>
