@@ -4,6 +4,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 import {
   LayoutDashboard,
   Users,
+  CalendarDays,
   BookOpen,
   Search,
   Bell,
@@ -31,6 +32,7 @@ import { cn } from "@/lib/utils";
 const nav = [
   { to: "/", label: "Tableau de bord", icon: LayoutDashboard, exact: true },
   { to: "/prospects", label: "Prospects", icon: Users },
+  { to: "/calendar", label: "Calendrier", icon: CalendarDays },
   { to: "/knowledge", label: "Base de connaissances", icon: BookOpen },
 ];
 

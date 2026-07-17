@@ -7,6 +7,7 @@ import {
   Clock,
   MapPin,
   Phone,
+  Plug,
   Sparkles,
 } from "lucide-react";
 
@@ -32,6 +33,7 @@ const tabs = [
   { to: "/knowledge/business-hours", label: "Horaires d'ouverture", icon: Clock },
   { to: "/knowledge/locations", label: "Emplacements", icon: MapPin },
   { to: "/knowledge/contact", label: "Contact", icon: Phone },
+  { to: "/knowledge/integrations", label: "Intégrations", icon: Plug },
 ];
 
 function KnowledgeLayout() {
