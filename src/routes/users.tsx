@@ -59,7 +59,7 @@ function UsersPage() {
   }
   function openEdit(u: AppUser) {
     setEditing(u);
-    setDraft({ name: u.name, email: u.email, role: u.role, status: u.status });
+    setDraft({ name: u.name, email: u.email, role: u.role, status: u.status, modules: u.modules ?? [] });
     setOpen(true);
   }
   function save() {
