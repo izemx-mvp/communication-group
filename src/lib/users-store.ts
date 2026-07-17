@@ -20,7 +20,32 @@ export const MODULES: { key: ModuleKey; label: string }[] = [
   { key: "users", label: "Gestion des utilisateurs" },
 ];
 
-const ALL: ModuleKey[] = MODULES.map((m) => m.key);
+export type CrudAction = "view" | "create" | "update" | "delete";
+export const CRUD_ACTIONS: { key: CrudAction; label: string }[] = [
+  { key: "view", label: "Voir" },
+  { key: "create", label: "Créer" },
+  { key: "update", label: "Modifier" },
+  { key: "delete", label: "Supprimer" },
+];
+
+export type ModulePermissions = Record<ModuleKey, Record<CrudAction, boolean>>;
+
+const noAccess = (): Record<CrudAction, boolean> => ({ view: false, create: false, update: false, delete: false });
+const fullAccess = (): Record<CrudAction, boolean> => ({ view: true, create: true, update: true, delete: true });
+const viewOnly = (): Record<CrudAction, boolean> => ({ view: true, create: false, update: false, delete: false });
+
+export function emptyPermissions(): ModulePermissions {
+  return MODULES.reduce((acc, m) => { acc[m.key] = noAccess(); return acc; }, {} as ModulePermissions);
+}
+function allPermissions(): ModulePermissions {
+  return MODULES.reduce((acc, m) => { acc[m.key] = fullAccess(); return acc; }, {} as ModulePermissions);
+}
+function permsFor(view: ModuleKey[], write: ModuleKey[] = []): ModulePermissions {
+  const p = emptyPermissions();
+  view.forEach((k) => (p[k] = viewOnly()));
+  write.forEach((k) => (p[k] = fullAccess()));
+  return p;
+}
 
 export interface AppUser {
   id: string;
@@ -29,15 +54,15 @@ export interface AppUser {
   role: UserRole;
   status: UserStatus;
   createdAt: string;
-  modules: ModuleKey[];
+  permissions: ModulePermissions;
 }
 
 const seed: AppUser[] = [
-  { id: "u1", name: "Yassine Alaoui", email: "yassine@n7group.com", role: "Admin", status: "Actif", createdAt: "2025-11-02", modules: ALL },
-  { id: "u2", name: "Fatima Zahra", email: "fatima@n7group.com", role: "Manager", status: "Actif", createdAt: "2025-12-14", modules: ["dashboard", "prospects", "calendar", "knowledge", "integrations"] },
-  { id: "u3", name: "Hicham Benali", email: "hicham@n7group.com", role: "Agent", status: "Actif", createdAt: "2026-01-08", modules: ["dashboard", "prospects", "calendar"] },
-  { id: "u4", name: "Sofia Idrissi", email: "sofia@n7group.com", role: "Agent", status: "Invité", createdAt: "2026-03-22", modules: ["dashboard", "prospects"] },
-  { id: "u5", name: "Karim Chraibi", email: "karim@n7group.com", role: "Lecteur", status: "Suspendu", createdAt: "2026-04-11", modules: ["dashboard"] },
+  { id: "u1", name: "Yassine Alaoui", email: "yassine@n7group.com", role: "Admin", status: "Actif", createdAt: "2025-11-02", permissions: allPermissions() },
+  { id: "u2", name: "Fatima Zahra", email: "fatima@n7group.com", role: "Manager", status: "Actif", createdAt: "2025-12-14", permissions: permsFor(["dashboard", "knowledge", "integrations"], ["prospects", "calendar"]) },
+  { id: "u3", name: "Hicham Benali", email: "hicham@n7group.com", role: "Agent", status: "Actif", createdAt: "2026-01-08", permissions: permsFor(["dashboard"], ["prospects", "calendar"]) },
+  { id: "u4", name: "Sofia Idrissi", email: "sofia@n7group.com", role: "Agent", status: "Invité", createdAt: "2026-03-22", permissions: permsFor(["dashboard", "prospects"]) },
+  { id: "u5", name: "Karim Chraibi", email: "karim@n7group.com", role: "Lecteur", status: "Suspendu", createdAt: "2026-04-11", permissions: permsFor(["dashboard"]) },
 ];
 
 let state: AppUser[] = [...seed];

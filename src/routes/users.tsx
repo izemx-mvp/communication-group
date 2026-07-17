@@ -21,7 +21,10 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { PageHeader } from "@/components/app-shell";
 import { Checkbox } from "@/components/ui/checkbox";
-import { usersStore, useUsers, MODULES, type AppUser, type UserRole, type UserStatus, type ModuleKey } from "@/lib/users-store";
+import {
+  usersStore, useUsers, MODULES, CRUD_ACTIONS, emptyPermissions,
+  type AppUser, type UserRole, type UserStatus,
+} from "@/lib/users-store";
 
 export const Route = createFileRoute("/users")({
   head: () => ({
@@ -33,9 +36,10 @@ export const Route = createFileRoute("/users")({
 const roles: UserRole[] = ["Admin", "Manager", "Agent", "Lecteur"];
 const statuses: UserStatus[] = ["Actif", "Invité", "Suspendu"];
 
-const emptyDraft: Omit<AppUser, "id" | "createdAt"> = {
-  name: "", email: "", role: "Agent", status: "Invité", modules: ["dashboard"],
-};
+const makeEmptyDraft = (): Omit<AppUser, "id" | "createdAt"> => ({
+  name: "", email: "", role: "Agent", status: "Invité",
+  permissions: { ...emptyPermissions(), dashboard: { view: true, create: false, update: false, delete: false } },
+});
 
 function UsersPage() {
   const users = useUsers();
@@ -43,7 +47,7 @@ function UsersPage() {
   const [role, setRole] = useState("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<AppUser | null>(null);
-  const [draft, setDraft] = useState({ ...emptyDraft });
+  const [draft, setDraft] = useState(makeEmptyDraft());
 
   const filtered = useMemo(() => users.filter((u) => {
     const s = q.toLowerCase().trim();
@@ -54,12 +58,15 @@ function UsersPage() {
 
   function openNew() {
     setEditing(null);
-    setDraft({ ...emptyDraft });
+    setDraft(makeEmptyDraft());
     setOpen(true);
   }
   function openEdit(u: AppUser) {
     setEditing(u);
-    setDraft({ name: u.name, email: u.email, role: u.role, status: u.status, modules: u.modules ?? [] });
+    setDraft({
+      name: u.name, email: u.email, role: u.role, status: u.status,
+      permissions: { ...emptyPermissions(), ...u.permissions },
+    });
     setOpen(true);
   }
   function save() {
@@ -152,21 +159,28 @@ function UsersPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="hidden xl:table-cell">
-                    <div className="flex flex-wrap gap-1 max-w-[280px]">
-                      {(u.modules ?? []).slice(0, 3).map((k) => {
-                        const m = MODULES.find((x) => x.key === k);
-                        return (
-                          <Badge key={k} variant="outline" className="font-normal text-[10px]">
-                            {m?.label ?? k}
-                          </Badge>
-                        );
-                      })}
-                      {(u.modules?.length ?? 0) > 3 && (
-                        <Badge variant="outline" className="font-normal text-[10px]">
-                          +{(u.modules?.length ?? 0) - 3}
-                        </Badge>
-                      )}
-                    </div>
+                    {(() => {
+                      const active = MODULES.filter((m) => u.permissions?.[m.key]?.view);
+                      return (
+                        <div className="flex flex-wrap gap-1 max-w-[280px]">
+                          {active.slice(0, 3).map((m) => {
+                            const p = u.permissions[m.key];
+                            const write = p.create || p.update || p.delete;
+                            return (
+                              <Badge key={m.key} variant="outline" className={cn(
+                                "font-normal text-[10px]",
+                                write && "bg-primary/10 text-primary border-primary/20",
+                              )}>
+                                {m.label}{write ? " • CRUD" : ""}
+                              </Badge>
+                            );
+                          })}
+                          {active.length > 3 && (
+                            <Badge variant="outline" className="font-normal text-[10px]">+{active.length - 3}</Badge>
+                          )}
+                        </div>
+                      );
+                    })()}
                   </TableCell>
                   <TableCell className="hidden lg:table-cell text-muted-foreground text-sm">{u.createdAt}</TableCell>
                   <TableCell className="text-right">
@@ -231,27 +245,62 @@ function UsersPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label>Accès aux modules</Label>
-              <div className="rounded-lg border border-border p-3 grid grid-cols-2 gap-2">
-                {MODULES.map((m) => {
-                  const checked = draft.modules.includes(m.key);
-                  return (
-                    <label key={m.key} className="flex items-center gap-2 text-sm cursor-pointer rounded-md px-2 py-1.5 hover:bg-muted">
-                      <Checkbox
-                        checked={checked}
-                        onCheckedChange={(v) => {
-                          const next = v
-                            ? [...draft.modules, m.key]
-                            : draft.modules.filter((k) => k !== m.key);
-                          setDraft({ ...draft, modules: next as ModuleKey[] });
-                        }}
-                      />
-                      <span>{m.label}</span>
-                    </label>
-                  );
-                })}
+              <div className="flex items-center justify-between">
+                <Label>Permissions par module</Label>
+                <div className="flex gap-1.5">
+                  <Button type="button" size="sm" variant="ghost" className="h-7 text-xs" onClick={() => {
+                    const next = { ...draft.permissions };
+                    MODULES.forEach((m) => { next[m.key] = { view: true, create: true, update: true, delete: true }; });
+                    setDraft({ ...draft, permissions: next });
+                  }}>Tout autoriser</Button>
+                  <Button type="button" size="sm" variant="ghost" className="h-7 text-xs" onClick={() => {
+                    setDraft({ ...draft, permissions: emptyPermissions() });
+                  }}>Tout retirer</Button>
+                </div>
               </div>
-              <p className="text-xs text-muted-foreground">Contrôle les sections visibles pour cet utilisateur dans la barre latérale.</p>
+              <div className="rounded-lg border border-border overflow-hidden">
+                <div className="grid grid-cols-[1.4fr_repeat(4,minmax(0,1fr))] items-center bg-muted/50 px-3 py-2 text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
+                  <div>Module</div>
+                  {CRUD_ACTIONS.map((a) => (
+                    <div key={a.key} className="text-center">{a.label}</div>
+                  ))}
+                </div>
+                <div className="divide-y divide-border">
+                  {MODULES.map((m) => {
+                    const p = draft.permissions[m.key];
+                    return (
+                      <div key={m.key} className="grid grid-cols-[1.4fr_repeat(4,minmax(0,1fr))] items-center px-3 py-2 text-sm hover:bg-muted/30">
+                        <div className="font-medium truncate">{m.label}</div>
+                        {CRUD_ACTIONS.map((a) => (
+                          <div key={a.key} className="flex justify-center">
+                            <Checkbox
+                              checked={p[a.key]}
+                              onCheckedChange={(v) => {
+                                const checked = Boolean(v);
+                                const nextForModule = { ...p, [a.key]: checked };
+                                // enabling any write requires view; disabling view clears writes
+                                if (a.key !== "view" && checked) nextForModule.view = true;
+                                if (a.key === "view" && !checked) {
+                                  nextForModule.create = false;
+                                  nextForModule.update = false;
+                                  nextForModule.delete = false;
+                                }
+                                setDraft({
+                                  ...draft,
+                                  permissions: { ...draft.permissions, [m.key]: nextForModule },
+                                });
+                              }}
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                « Voir » contrôle l'accès au module dans la barre latérale. Créer / Modifier / Supprimer accordent les actions correspondantes.
+              </p>
             </div>
           </div>
           <DialogFooter>
