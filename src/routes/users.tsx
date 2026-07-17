@@ -186,7 +186,7 @@ function UsersPage() {
               ))}
               {filtered.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={6} className="text-center py-10 text-muted-foreground text-sm">
+                  <TableCell colSpan={7} className="text-center py-10 text-muted-foreground text-sm">
                     Aucun utilisateur trouvé
                   </TableCell>
                 </TableRow>
