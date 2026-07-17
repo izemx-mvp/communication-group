@@ -81,8 +81,13 @@ function UsersPage() {
   }
 
   return (
-    <Card className="shadow-soft">
-      <CardContent className="p-4 space-y-4">
+    <div>
+      <PageHeader
+        title="Gestion des utilisateurs"
+        description="Créez, modifiez et gérez les accès de votre équipe au back office."
+      />
+      <Card className="shadow-soft">
+        <CardContent className="p-4 space-y-4">
         <div className="flex flex-wrap items-center gap-3">
           <div className="relative flex-1 min-w-[220px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
