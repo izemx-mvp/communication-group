@@ -212,6 +212,29 @@ function UsersPage() {
                 </Select>
               </div>
             </div>
+            <div className="space-y-2">
+              <Label>Accès aux modules</Label>
+              <div className="rounded-lg border border-border p-3 grid grid-cols-2 gap-2">
+                {MODULES.map((m) => {
+                  const checked = draft.modules.includes(m.key);
+                  return (
+                    <label key={m.key} className="flex items-center gap-2 text-sm cursor-pointer rounded-md px-2 py-1.5 hover:bg-muted">
+                      <Checkbox
+                        checked={checked}
+                        onCheckedChange={(v) => {
+                          const next = v
+                            ? [...draft.modules, m.key]
+                            : draft.modules.filter((k) => k !== m.key);
+                          setDraft({ ...draft, modules: next as ModuleKey[] });
+                        }}
+                      />
+                      <span>{m.label}</span>
+                    </label>
+                  );
+                })}
+              </div>
+              <p className="text-xs text-muted-foreground">Contrôle les sections visibles pour cet utilisateur dans la barre latérale.</p>
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setOpen(false)}>Annuler</Button>
