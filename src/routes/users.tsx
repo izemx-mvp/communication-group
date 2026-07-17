@@ -47,7 +47,7 @@ function UsersPage() {
   const [role, setRole] = useState("all");
   const [open, setOpen] = useState(false);
   const [editing, setEditing] = useState<AppUser | null>(null);
-  const [draft, setDraft] = useState({ ...emptyDraft });
+  const [draft, setDraft] = useState(makeEmptyDraft());
 
   const filtered = useMemo(() => users.filter((u) => {
     const s = q.toLowerCase().trim();
@@ -58,12 +58,15 @@ function UsersPage() {
 
   function openNew() {
     setEditing(null);
-    setDraft({ ...emptyDraft });
+    setDraft(makeEmptyDraft());
     setOpen(true);
   }
   function openEdit(u: AppUser) {
     setEditing(u);
-    setDraft({ name: u.name, email: u.email, role: u.role, status: u.status, modules: u.modules ?? [] });
+    setDraft({
+      name: u.name, email: u.email, role: u.role, status: u.status,
+      permissions: { ...emptyPermissions(), ...u.permissions },
+    });
     setOpen(true);
   }
   function save() {
