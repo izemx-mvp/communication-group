@@ -114,6 +114,7 @@ function UsersPage() {
                 <TableHead className="hidden md:table-cell">Email</TableHead>
                 <TableHead>Rôle</TableHead>
                 <TableHead>Statut</TableHead>
+                <TableHead className="hidden xl:table-cell">Modules</TableHead>
                 <TableHead className="hidden lg:table-cell">Créé le</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
