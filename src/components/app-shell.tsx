@@ -55,9 +55,11 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="relative flex min-h-screen w-full bg-background text-foreground">
       {/* ambient background */}
       <div className="pointer-events-none fixed inset-0 -z-0 overflow-hidden">
-        <div className="absolute -top-40 left-1/3 h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute bottom-[-160px] right-[-100px] h-[420px] w-[420px] rounded-full bg-info/10 blur-3xl" />
-        <div className="absolute inset-0 [background-image:linear-gradient(to_right,color-mix(in_oklab,var(--color-border)_45%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,var(--color-border)_45%,transparent)_1px,transparent_1px)] [background-size:52px_52px] [mask-image:radial-gradient(ellipse_at_top,black_20%,transparent_80%)] opacity-30" />
+        <div className="absolute -top-48 left-1/4 h-[520px] w-[520px] rounded-full bg-primary/15 blur-[120px]" />
+        <div className="absolute top-1/3 -right-40 h-[420px] w-[420px] rounded-full bg-[oklch(0.72_0.11_260)]/20 blur-[110px]" />
+        <div className="absolute bottom-[-200px] left-[-100px] h-[460px] w-[460px] rounded-full bg-[oklch(0.85_0.08_45)]/25 blur-[120px]" />
+        <div className="absolute inset-0 [background-image:linear-gradient(to_right,color-mix(in_oklab,var(--color-border)_45%,transparent)_1px,transparent_1px),linear-gradient(to_bottom,color-mix(in_oklab,var(--color-border)_45%,transparent)_1px,transparent_1px)] [background-size:52px_52px] [mask-image:radial-gradient(ellipse_at_top,black_15%,transparent_75%)] opacity-25" />
+        <div className="absolute inset-0 [background-image:radial-gradient(circle_at_1px_1px,color-mix(in_oklab,var(--color-foreground)_20%,transparent)_1px,transparent_0)] [background-size:28px_28px] [mask-image:radial-gradient(ellipse_at_bottom_right,black_0%,transparent_60%)] opacity-30" />
       </div>
       {/* Sidebar */}
       <aside className="relative z-10 hidden md:flex w-64 shrink-0 flex-col border-r border-border bg-sidebar/80 backdrop-blur">
