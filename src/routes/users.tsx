@@ -23,7 +23,7 @@ import { PageHeader } from "@/components/app-shell";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
   usersStore, useUsers, MODULES, CRUD_ACTIONS, emptyPermissions,
-  type AppUser, type UserRole, type UserStatus, type ModuleKey, type CrudAction,
+  type AppUser, type UserRole, type UserStatus,
 } from "@/lib/users-store";
 
 export const Route = createFileRoute("/users")({
