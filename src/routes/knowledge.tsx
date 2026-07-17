@@ -9,6 +9,8 @@ import {
   Phone,
   Plug,
   Sparkles,
+  UserCog,
+
 } from "lucide-react";
 
 import { PageHeader } from "@/components/app-shell";
