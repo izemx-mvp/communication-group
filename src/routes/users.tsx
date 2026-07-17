@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { PageHeader } from "@/components/app-shell";
 import { usersStore, useUsers, type AppUser, type UserRole, type UserStatus } from "@/lib/users-store";
 
 export const Route = createFileRoute("/users")({
