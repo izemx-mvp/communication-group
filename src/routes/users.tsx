@@ -151,6 +151,23 @@ function UsersPage() {
                       {u.status}
                     </Badge>
                   </TableCell>
+                  <TableCell className="hidden xl:table-cell">
+                    <div className="flex flex-wrap gap-1 max-w-[280px]">
+                      {(u.modules ?? []).slice(0, 3).map((k) => {
+                        const m = MODULES.find((x) => x.key === k);
+                        return (
+                          <Badge key={k} variant="outline" className="font-normal text-[10px]">
+                            {m?.label ?? k}
+                          </Badge>
+                        );
+                      })}
+                      {(u.modules?.length ?? 0) > 3 && (
+                        <Badge variant="outline" className="font-normal text-[10px]">
+                          +{(u.modules?.length ?? 0) - 3}
+                        </Badge>
+                      )}
+                    </div>
+                  </TableCell>
                   <TableCell className="hidden lg:table-cell text-muted-foreground text-sm">{u.createdAt}</TableCell>
                   <TableCell className="text-right">
                     <div className="inline-flex gap-1">
