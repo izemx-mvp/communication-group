@@ -160,7 +160,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <DropdownMenuItem>
                     <Settings className="h-4 w-4 mr-2" /> Paramètres
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onSelect={handleSignOut}>
                     <LogOut className="h-4 w-4 mr-2" /> Se déconnecter
                   </DropdownMenuItem>
                 </DropdownMenuContent>
