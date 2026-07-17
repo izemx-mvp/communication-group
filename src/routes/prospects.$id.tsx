@@ -2,8 +2,10 @@ import { createFileRoute, Link, useNavigate, useParams } from "@tanstack/react-r
 import { useState } from "react";
 import {
   ArrowLeft, Mail, Phone, MapPin, Building2, Edit, UserCheck, Trash2, Calendar,
+  Video, ExternalLink, Plus,
 } from "lucide-react";
 import { toast } from "sonner";
+import { meetingsStore, useMeetings, generateMeetLink, type Meeting } from "@/lib/meetings-store";
 
 import { PageHeader, StatusBadge } from "@/components/app-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -112,6 +114,8 @@ function ProspectDetail() {
               </div>
             </CardContent>
           </Card>
+
+          <ProspectMeetings prospectId={p.id} prospectName={`${p.prenom} ${p.nom}`} prospectEmail={p.email} />
 
           <Card className="shadow-soft">
             <CardHeader><CardTitle className="text-base">Notes internes</CardTitle></CardHeader>
@@ -280,5 +284,167 @@ function KV({ k, v }: { k: string; v: React.ReactNode }) {
       <span className="text-muted-foreground">{k}</span>
       <span className="font-medium">{v}</span>
     </div>
+  );
+}
+
+function ProspectMeetings({
+  prospectId, prospectName, prospectEmail,
+}: { prospectId: string; prospectName: string; prospectEmail: string }) {
+  const all = useMeetings();
+  const meetings = all
+    .filter((m) => m.prospectId === prospectId)
+    .sort((a, b) => +new Date(a.start) - +new Date(b.start));
+  const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState<Meeting | null>(null);
+
+  return (
+    <Card className="shadow-soft">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0">
+        <CardTitle className="text-base flex items-center gap-2">
+          <Video className="h-4 w-4 text-primary" /> Réunions
+        </CardTitle>
+        <Button size="sm" variant="outline" onClick={() => setOpen(true)}>
+          <Plus className="h-4 w-4 mr-1.5" />Planifier
+        </Button>
+      </CardHeader>
+      <CardContent>
+        {meetings.length === 0 ? (
+          <div className="text-sm text-muted-foreground py-4 text-center">
+            Aucune réunion planifiée. Ce prospect a-t-il demandé un rendez-vous ?
+          </div>
+        ) : (
+          <div className="space-y-2">
+            {meetings.map((mt) => {
+              const d = new Date(mt.start);
+              return (
+                <div key={mt.id} className="flex items-center gap-3 rounded-lg border border-border p-3">
+                  <div className="grid h-10 w-10 place-items-center rounded-lg bg-primary/10 text-primary">
+                    <Video className="h-4 w-4" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium truncate">{mt.title}</div>
+                    <div className="text-xs text-muted-foreground truncate">
+                      {d.toLocaleDateString("fr-FR", { weekday: "short", day: "numeric", month: "short" })} · {d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })} · {mt.durationMin} min
+                    </div>
+                  </div>
+                  <a href={mt.meetLink} target="_blank" rel="noreferrer">
+                    <Button size="sm" variant="outline"><ExternalLink className="h-3.5 w-3.5 mr-1.5" />Meet</Button>
+                  </a>
+                  <Button size="sm" variant="ghost" onClick={() => setEditing(mt)}>Modifier</Button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </CardContent>
+
+      <MeetingFormDialog
+        open={open || !!editing}
+        meeting={editing}
+        prospectId={prospectId}
+        prospectName={prospectName}
+        prospectEmail={prospectEmail}
+        onClose={() => { setOpen(false); setEditing(null); }}
+      />
+    </Card>
+  );
+}
+
+function MeetingFormDialog({
+  open, meeting, prospectId, prospectName, prospectEmail, onClose,
+}: {
+  open: boolean;
+  meeting: Meeting | null;
+  prospectId: string;
+  prospectName: string;
+  prospectEmail: string;
+  onClose: () => void;
+}) {
+  const now = new Date();
+  const defaults: Meeting = meeting ?? {
+    id: "",
+    prospectId,
+    title: "Rendez-vous découverte",
+    clientName: prospectName,
+    clientEmail: prospectEmail,
+    start: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 10, 0).toISOString(),
+    durationMin: 30,
+    meetLink: generateMeetLink(),
+    notes: "",
+  };
+  const [d, setD] = useState<Meeting>(defaults);
+  // Reset when opening for a different item
+  useState(() => setD(defaults));
+
+  const sd = new Date(d.start);
+  const dateStr = `${sd.getFullYear()}-${String(sd.getMonth() + 1).padStart(2, "0")}-${String(sd.getDate()).padStart(2, "0")}`;
+  const timeStr = `${String(sd.getHours()).padStart(2, "0")}:${String(sd.getMinutes()).padStart(2, "0")}`;
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
+      <DialogContent className="sm:max-w-[520px] max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>{meeting ? "Modifier la réunion" : "Planifier une réunion"}</DialogTitle>
+        </DialogHeader>
+        <div className="space-y-3">
+          <div><Label>Titre</Label><Input value={d.title} onChange={(e) => setD({ ...d, title: e.target.value })} /></div>
+          <div className="grid grid-cols-2 gap-3">
+            <div><Label>Nom du client</Label><Input value={d.clientName} onChange={(e) => setD({ ...d, clientName: e.target.value })} /></div>
+            <div><Label>Email</Label><Input type="email" value={d.clientEmail} onChange={(e) => setD({ ...d, clientEmail: e.target.value })} /></div>
+          </div>
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <Label>Date</Label>
+              <Input type="date" value={dateStr} onChange={(e) => {
+                const [Y, M, D] = e.target.value.split("-").map(Number);
+                const nd = new Date(d.start); nd.setFullYear(Y, M - 1, D);
+                setD({ ...d, start: nd.toISOString() });
+              }} />
+            </div>
+            <div>
+              <Label>Heure</Label>
+              <Input type="time" value={timeStr} onChange={(e) => {
+                const [h, mi] = e.target.value.split(":").map(Number);
+                const nd = new Date(d.start); nd.setHours(h, mi, 0, 0);
+                setD({ ...d, start: nd.toISOString() });
+              }} />
+            </div>
+            <div>
+              <Label>Durée (min)</Label>
+              <Input type="number" min={10} step={5} value={d.durationMin} onChange={(e) => setD({ ...d, durationMin: Number(e.target.value) || 30 })} />
+            </div>
+          </div>
+          <div>
+            <Label>Lien Google Meet</Label>
+            <div className="flex gap-2">
+              <Input value={d.meetLink} onChange={(e) => setD({ ...d, meetLink: e.target.value })} />
+              <Button type="button" variant="outline" onClick={() => setD({ ...d, meetLink: generateMeetLink() })}>Régénérer</Button>
+            </div>
+          </div>
+          <div><Label>Notes</Label><Textarea rows={3} value={d.notes ?? ""} onChange={(e) => setD({ ...d, notes: e.target.value })} /></div>
+        </div>
+        <DialogFooter className="gap-2">
+          {meeting && (
+            <Button variant="outline" className="text-destructive" onClick={() => {
+              meetingsStore.remove(meeting.id);
+              toast.success("Réunion supprimée");
+              onClose();
+            }}><Trash2 className="h-4 w-4 mr-1.5" />Supprimer</Button>
+          )}
+          <div className="flex-1" />
+          <Button variant="outline" onClick={onClose}>Annuler</Button>
+          <Button onClick={() => {
+            if (meeting) {
+              meetingsStore.update(meeting.id, d);
+              toast.success("Réunion mise à jour");
+            } else {
+              meetingsStore.add({ ...d, prospectId });
+              toast.success("Réunion planifiée · Lien Google Meet créé");
+            }
+            onClose();
+          }}>Enregistrer</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
