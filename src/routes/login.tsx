@@ -185,10 +185,6 @@ function LoginPage() {
             </Button>
           </form>
 
-          <div className="mt-6 rounded-xl border border-dashed border-border/70 bg-muted/30 px-3.5 py-2.5 text-[11px] text-muted-foreground">
-            <span className="font-medium text-foreground/80">Demo :</span>{" "}
-            admin@n7group.com · N7@admin2026
-          </div>
         </motion.div>
       </div>
     </div>
