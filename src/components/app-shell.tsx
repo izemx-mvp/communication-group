@@ -11,7 +11,9 @@ import {
   Settings,
   LogOut,
   Sparkles,
+  Cpu,
 } from "lucide-react";
+import { useRouterState } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
 
@@ -31,9 +33,10 @@ import { cn } from "@/lib/utils";
 
 const nav = [
   { to: "/", label: "Tableau de bord", icon: LayoutDashboard, exact: true },
-  { to: "/prospects", label: "Prospects", icon: Users },
+  { to: "/prospects", label: "Qualification AI", icon: Users },
   { to: "/calendar", label: "Calendrier", icon: CalendarDays },
-  { to: "/knowledge", label: "Base de connaissances", icon: BookOpen },
+  { to: "/knowledge", label: "Service Client AI", icon: BookOpen },
+  { to: "/models", label: "Modèles IA", icon: Cpu },
 ];
 
 
