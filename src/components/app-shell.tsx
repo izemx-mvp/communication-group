@@ -1,5 +1,5 @@
 const n7MobileLogo = "https://n7.ma/wp-content/uploads/2025/06/n7-mobile-logo.png";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 
 
 import {
